@@ -10,7 +10,7 @@ window.APP_CONFIG = {
     // URL base del API
     // En desarrollo: http://localhost/api
     // En producción: https://tu-dominio.com/api
-    API_BASE_URL: 'http://localhost/api',
+    API_BASE_URL: 'http://localhost:8080',
     
     // Configuración de timeout para peticiones (en milisegundos)
     REQUEST_TIMEOUT: 30000,

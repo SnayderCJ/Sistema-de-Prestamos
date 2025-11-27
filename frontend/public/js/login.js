@@ -9,6 +9,9 @@ class LoginExperience {
         this.greetingEl = document.getElementById('loginGreeting');
         this.rememberCheckbox = document.getElementById('remember');
         this.emailInput = document.getElementById('email');
+        this.submitBtn = document.getElementById('loginSubmit');
+        this.errorEl = document.getElementById('loginError');
+
 
         this.init();
     }
@@ -20,6 +23,55 @@ class LoginExperience {
         this.restoreRememberedEmail();
         this.observeMetrics();
         this.persistEmailOnChange();
+        this.bindFormSubmit();
+    }
+
+    async handleLogin(email, password) {
+        this.setLoading(true);
+        this.showError(''); // Limpiar errores previos
+
+        try {
+            await auth.login(email, password);
+            window.location.href = '/views/index.html';
+        } catch (error) {
+            console.error('Error de login:', error);
+            const detail = error.status ? ` (Código: ${error.status})` : '';
+            this.showError(`${error.message}${detail}`);
+        } finally {
+            this.setLoading(false);
+        }
+    }
+
+    bindFormSubmit() {
+        if (!this.form) return;
+        this.form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = this.emailInput.value;
+            const password = this.passwordInput.value;
+            this.handleLogin(email, password);
+        });
+    }
+
+    setLoading(isLoading) {
+        if (!this.submitBtn) return;
+        const label = this.submitBtn.querySelector('.btn-label');
+        const spinner = this.submitBtn.querySelector('.btn-spinner');
+
+        if (isLoading) {
+            this.submitBtn.disabled = true;
+            if(label) label.style.display = 'none';
+            if(spinner) spinner.style.display = 'inline-block';
+        } else {
+            this.submitBtn.disabled = false;
+            if(label) label.style.display = 'inline-block';
+            if(spinner) spinner.style.display = 'none';
+        }
+    }
+
+    showError(message) {
+        if (!this.errorEl) return;
+        this.errorEl.textContent = message;
+        this.errorEl.hidden = !message;
     }
 
     renderGreeting() {

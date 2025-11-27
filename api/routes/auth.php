@@ -12,6 +12,8 @@ switch ($method) {
     case 'POST':
         if ($id === 'login') {
             $controller->login($data);
+        } elseif ($id === 'register') {
+            $controller->register($data);
         } elseif ($id === 'refresh') {
             $controller->refreshToken($data);
         } elseif ($id === 'forgot-password') {

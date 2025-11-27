@@ -52,6 +52,83 @@ class AuthController {
             'expires_in' => JWT_EXPIRATION
         ]);
     }
+
+    public function register($data) {
+        // 1. Validación de datos
+        $requiredFields = ['nombre', 'apellido', 'cedula', 'email', 'password'];
+        foreach ($requiredFields as $field) {
+            if (!isset($data[$field]) || empty(trim($data[$field]))) {
+                sendError("El campo '$field' es requerido.", 400);
+                return;
+            }
+        }
+
+        $email = filter_var($data['email'], FILTER_VALIDATE_EMAIL);
+        if (!$email) {
+            sendError('El formato del email no es válido.', 400);
+            return;
+        }
+
+        if (strlen($data['password']) < 8) {
+            sendError('La contraseña debe tener al menos 8 caracteres.', 400);
+            return;
+        }
+
+        // 2. Verificar duplicados (email o cédula)
+        $stmt = $this->db->query(
+            "SELECT id FROM usuarios WHERE email = ? OR cedula = ?",
+            [$email, $data['cedula']]
+        );
+        if ($stmt->fetch()) {
+            sendError('El email o la cédula ya están registrados.', 409); // 409 Conflict
+            return;
+        }
+
+        // 3. Hashear contraseña
+        $passwordHash = password_hash($data['password'], PASSWORD_DEFAULT);
+
+        // 4. Insertar en la base de datos
+        try {
+            $this->db->query(
+                "INSERT INTO usuarios (nombre, apellido, cedula, email, password, telefono, rol, sucursal_id, activo, fecha_creacion) 
+                 VALUES (?, ?, ?, ?, ?, ?, 'analista', 1, 1, NOW())",
+                [
+                    $data['nombre'],
+                    $data['apellido'],
+                    $data['cedula'],
+                    $email,
+                    $passwordHash,
+                    $data['telefono'] ?? null
+                ]
+            );
+
+            $newUserId = $this->db->lastInsertId();
+            
+            // Auto-login after registration
+            $stmt = $this->db->query(
+                "SELECT id, cedula, nombre, apellido, email, rol, sucursal_id, activo 
+                 FROM usuarios 
+                 WHERE id = ?",
+                [$newUserId]
+            );
+            $user = $stmt->fetch();
+
+            $token = $this->generateToken($user['id'], $user['rol']);
+            $refreshToken = $this->generateRefreshToken($user['id']);
+            
+            sendResponse([
+                'message' => 'Usuario registrado correctamente.',
+                'token' => $token,
+                'refresh_token' => $refreshToken,
+                'user' => $user,
+                'expires_in' => JWT_EXPIRATION
+            ], 201);
+
+        } catch (Exception $e) {
+            error_log("Error de registro: " . $e->getMessage());
+            sendError('Ocurrió un error al registrar el usuario.', 500);
+        }
+    }
     
     public function refreshToken($data) {
         if (!isset($data['refresh_token']) || empty($data['refresh_token'])) {

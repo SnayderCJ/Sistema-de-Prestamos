@@ -18,7 +18,12 @@ class ApiClient {
     }
 
     async request(endpoint, options = {}) {
-        const url = `${this.baseUrl}${endpoint}`;
+        const cleanEndpoint = endpoint.startsWith('/') ? endpoint.substring(1) : endpoint;
+        const [path, ...queryParts] = cleanEndpoint.split('?');
+        const queryString = queryParts.join('?');
+        
+        const url = `${this.baseUrl}/index.php?route=${path}${queryString ? '&' + queryString : ''}`;
+        
         const config = {
             headers: {
                 'Content-Type': 'application/json',
@@ -132,8 +137,13 @@ class ApiClient {
 
     async downloadFile(endpoint, params = {}, filename = 'download') {
         const queryString = new URLSearchParams(params).toString();
-        const url = queryString ? `${endpoint}?${queryString}` : endpoint;
-        const fullUrl = `${this.baseUrl}${url}`;
+        const urlWithParams = queryString ? `${endpoint}?${queryString}` : endpoint;
+        
+        const cleanEndpoint = urlWithParams.startsWith('/') ? urlWithParams.substring(1) : urlWithParams;
+        const [path, ...queryParts] = cleanEndpoint.split('?');
+        const finalQueryString = queryParts.join('?');
+        
+        const fullUrl = `${this.baseUrl}/index.php?route=${path}${finalQueryString ? '&' + finalQueryString : ''}`;
         
         const config = {
             headers: {}
@@ -185,6 +195,17 @@ class AuthService {
             return response.data;
         }
         throw new Error('Error en el login');
+    }
+
+    async register(userData) {
+        const response = await api.post('/auth/register', userData);
+        if (response.success && response.data.token) {
+            authToken = response.data.token;
+            localStorage.setItem('authToken', authToken);
+            localStorage.setItem('user', JSON.stringify(response.data.user));
+            return response.data;
+        }
+        return response;
     }
 
     async logout() {
@@ -353,15 +374,24 @@ class UI {
 // ============================================
 
 document.addEventListener('DOMContentLoaded', () => {
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    const isAuthPage = currentPage === 'login.html' || currentPage === 'register.html';
+    const path = window.location.pathname;
+    const currentPage = path.split('/').pop();
 
-    if (auth.isAuthenticated()) {
-        if (currentPage === 'index.html') {
-            loadDashboard();
+    const publicPages = ['login.html', 'register.html'];
+    const isPublicPage = publicPages.includes(currentPage);
+
+    const isAuthenticated = auth.isAuthenticated();
+
+    if (isAuthenticated) {
+        // Si está autenticado y en una página pública (login/register), redirigir al dashboard
+        if (isPublicPage) {
+            window.location.href = '/views/index.html';
         }
-    } else if (!isAuthPage) {
-        console.warn('Vista sin autenticación: acceso permitido sin redirección.');
+    } else {
+        // Si no está autenticado y no está en una página pública, redirigir al login
+        if (!isPublicPage) {
+            window.location.href = '/login.html';
+        }
     }
 });
 

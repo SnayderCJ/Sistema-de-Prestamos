@@ -1,8 +1,7 @@
 <?php
-/**
- * ImaxPrestamos - API REST
- * Sistema de Gestión de Préstamos
- */
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
@@ -30,17 +29,9 @@ spl_autoload_register(function ($class) {
     }
 });
 
-// Obtener la ruta solicitada
-$request_uri = $_SERVER['REQUEST_URI'];
-$script_name = $_SERVER['SCRIPT_NAME'];
-$path = str_replace(dirname($script_name), '', parse_url($request_uri, PHP_URL_PATH));
-$path = trim($path, '/');
+// Obtener la ruta solicitada desde el parámetro 'route' y el método HTTP
+$path = $_GET['route'] ?? '';
 $segments = explode('/', $path);
-
-// Remover 'api' si está presente
-if (isset($segments[0]) && $segments[0] === 'api') {
-    array_shift($segments);
-}
 
 $method = $_SERVER['REQUEST_METHOD'];
 $resource = $segments[0] ?? '';
@@ -300,4 +291,3 @@ try {
     error_log("Error en API: " . $e->getMessage());
     sendError('Error interno del servidor: ' . $e->getMessage(), 500);
 }
-
