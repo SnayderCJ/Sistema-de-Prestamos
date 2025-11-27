@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compras - ImaxPrestamos</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <!-- Header -->
+    <!-- Header Component -->
+    <div data-component="header"></div>
+
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <!-- Sidebar Component -->
+        <div data-component="sidebar"></div>
+
+        <!-- Main Content -->
+        <main class="main-content" role="main">
+            <div class="page-header">
+                <h1>Compras</h1>
+                <button class="btn btn-primary" onclick="abrirModalNuevaCompra()">Nueva Compra</button>
+            </div>
+
+            <!-- Filtros -->
+            <div class="filters-bar">
+                <input type="text" id="buscarCompra" class="form-control" placeholder="Buscar por número, proveedor..." onkeyup="filtrarCompras()">
+                <select id="filtroProveedor" class="form-control" onchange="cargarCompras()">
+                    <option value="">Todos los proveedores</option>
+                </select>
+                <select id="filtroEstado" class="form-control" onchange="cargarCompras()">
+                    <option value="">Todos los estados</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="completada">Completada</option>
+                    <option value="cancelada">Cancelada</option>
+                </select>
+                <input type="date" id="filtroFechaDesde" class="form-control" onchange="cargarCompras()">
+                <input type="date" id="filtroFechaHasta" class="form-control" onchange="cargarCompras()">
+            </div>
+
+            <!-- Tabla de Compras -->
+            <div class="table-responsive">
+                <table class="table" id="tablaCompras">
+                    <thead>
+                        <tr>
+                            <th>Número</th>
+                            <th>Fecha</th>
+                            <th>Proveedor</th>
+                            <th>Artículos</th>
+                            <th>Subtotal</th>
+                            <th>Descuento</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="9" class="text-center">
+                                <div class="loading">
+                                    <div class="loading-spinner"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Paginación -->
+            <div class="pagination" id="paginacionCompras"></div>
+        </main>
+    </div>
+
+    <!-- Modal Nueva Compra -->
+    <div class="modal" id="modalCompra">
+        <div class="modal-backdrop" onclick="cerrarModal('modalCompra')"></div>
+        <div class="modal-dialog modal-xl">
+            <div class="modal-header">
+                <h3 class="modal-title">Nueva Compra</h3>
+                <button class="modal-close" onclick="cerrarModal('modalCompra')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="formCompra" onsubmit="guardarCompra(event)">
+                    <div class="grid grid-2">
+                        <div class="form-group">
+                            <label>Proveedor *</label>
+                            <select id="compraProveedorId" class="form-control" required>
+                                <option value="">Seleccionar proveedor</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Número de Factura</label>
+                            <input type="text" id="compraNumeroFactura" class="form-control">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Buscar Artículo</label>
+                        <input type="text" id="buscarArticuloCompra" class="form-control" placeholder="Buscar por código o nombre..." onkeyup="buscarArticulosCompra()">
+                        <div id="resultadosArticulosCompra" class="dropdown-results" style="display:none;"></div>
+                    </div>
+                    
+                    <div class="table-responsive mt-3">
+                        <table class="table" id="tablaArticulosCompra">
+                            <thead>
+                                <tr>
+                                    <th>Artículo</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio Unitario</th>
+                                    <th>Descuento %</th>
+                                    <th>Subtotal</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyArticulosCompra">
+                                <tr>
+                                    <td colspan="6" class="text-center">No hay artículos agregados</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <div class="grid grid-2">
+                            <div>
+                                <div class="form-group">
+                                    <label>Descuento General (%)</label>
+                                    <input type="number" id="compraDescuentoGeneral" class="form-control" min="0" max="100" step="0.01" value="0" onchange="calcularTotalesCompra()">
+                                </div>
+                            </div>
+                            <div>
+                                <table class="table">
+                                    <tr>
+                                        <th>Subtotal:</th>
+                                        <td id="compraSubtotal">RD$ 0.00</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Descuento:</th>
+                                        <td id="compraDescuento">RD$ 0.00</td>
+                                    </tr>
+                                    <tr>
+                                        <th><strong>Total:</strong></th>
+                                        <td><strong id="compraTotal">RD$ 0.00</strong></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Observaciones</label>
+                        <textarea id="compraObservaciones" class="form-control" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="cerrarModal('modalCompra')">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar Compra</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Detalle Compra -->
+    <div class="modal" id="modalDetalleCompra">
+        <div class="modal-backdrop" onclick="cerrarModal('modalDetalleCompra')"></div>
+        <div class="modal-dialog modal-lg">
+            <div class="modal-header">
+                <h3 class="modal-title">Detalle de Compra</h3>
+                <button class="modal-close" onclick="cerrarModal('modalDetalleCompra')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="grid grid-2">
+                    <div>
+                        <h4>Información de la Compra</h4>
+                        <table class="table">
+                            <tr>
+                                <th>Número:</th>
+                                <td id="detalleCompraNumero">-</td>
+                            </tr>
+                            <tr>
+                                <th>Fecha:</th>
+                                <td id="detalleCompraFecha">-</td>
+                            </tr>
+                            <tr>
+                                <th>Proveedor:</th>
+                                <td id="detalleCompraProveedor">-</td>
+                            </tr>
+                            <tr>
+                                <th>Número Factura:</th>
+                                <td id="detalleCompraNumeroFactura">-</td>
+                            </tr>
+                            <tr>
+                                <th>Estado:</th>
+                                <td><span id="detalleCompraEstado" class="badge">-</span></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div>
+                        <h4>Totales</h4>
+                        <table class="table">
+                            <tr>
+                                <th>Subtotal:</th>
+                                <td id="detalleCompraSubtotal">-</td>
+                            </tr>
+                            <tr>
+                                <th>Descuento:</th>
+                                <td id="detalleCompraDescuento">-</td>
+                            </tr>
+                            <tr>
+                                <th><strong>Total:</strong></th>
+                                <td><strong id="detalleCompraTotal">-</strong></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="mt-3">
+                    <h4>Artículos</h4>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Artículo</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio Unitario</th>
+                                    <th>Descuento</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody id="detalleCompraArticulos">
+                                <tr><td colspan="5" class="text-center">Cargando...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-info" onclick="imprimirCompra()">Imprimir</button>
+                <button class="btn btn-secondary" onclick="cerrarModal('modalDetalleCompra')">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/compras.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.erp.prestamos">
+
+    <!-- Permisos -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:name=".MyApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+        android:usesCleartextTraffic="true">
+        
+        <!-- Firebase Messaging Service -->
+        <service
+            android:name=".services.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        
+        <!-- Login Activity (Launcher) -->
+        <activity
+            android:name=".activities.LoginActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <!-- Dashboard Activity -->
+        <activity
+            android:name=".activities.DashboardActivity"
+            android:exported="false"
+            android:parentActivityName=".activities.LoginActivity" />
+        
+        <!-- Préstamos Activities -->
+        <activity
+            android:name=".activities.PrestamosActivity"
+            android:exported="false"
+            android:parentActivityName=".activities.DashboardActivity" />
+        
+        <activity
+            android:name=".activities.PrestamoDetailActivity"
+            android:exported="false"
+            android:parentActivityName=".activities.PrestamosActivity" />
+        
+        <activity
+            android:name=".activities.CreatePrestamoActivity"
+            android:exported="false"
+            android:parentActivityName=".activities.PrestamosActivity" />
+        
+        <!-- Clientes Activities -->
+        <activity
+            android:name=".activities.ClientesActivity"
+            android:exported="false"
+            android:parentActivityName=".activities.DashboardActivity" />
+        
+        <activity
+            android:name=".activities.ClienteDetailActivity"
+            android:exported="false"
+            android:parentActivityName=".activities.ClientesActivity" />
+        
+        <activity
+            android:name=".activities.CreateClienteActivity"
+            android:exported="false"
+            android:parentActivityName=".activities.ClientesActivity" />
+        
+        <!-- Rutas Activities -->
+        <activity
+            android:name=".activities.RutasActivity"
+            android:exported="false"
+            android:parentActivityName=".activities.DashboardActivity" />
+        
+        <activity
+            android:name=".activities.RutaDetailActivity"
+            android:exported="false"
+            android:parentActivityName=".activities.RutasActivity" />
+        
+        <activity
+            android:name=".activities.CreateRutaActivity"
+            android:exported="false"
+            android:parentActivityName=".activities.RutasActivity" />
+        
+        <!-- Pagos Activities -->
+        <activity
+            android:name=".activities.PagosActivity"
+            android:exported="false"
+            android:parentActivityName=".activities.DashboardActivity" />
+        
+        <activity
+            android:name=".activities.CreatePagoActivity"
+            android:exported="false"
+            android:parentActivityName=".activities.PagosActivity" />
+        
+        <!-- Calculadora de Préstamos -->
+        <activity
+            android:name=".activities.CalculadoraPrestamoActivity"
+            android:exported="false"
+            android:parentActivityName=".activities.PrestamosActivity" />
+    </application>
+
+</manifest>
+

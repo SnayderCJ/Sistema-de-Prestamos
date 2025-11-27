@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ImaxPrestamos</string>
+    
+    <!-- Login -->
+    <string name="login_title">Iniciar Sesión</string>
+    <string name="email">Email</string>
+    <string name="password">Contraseña</string>
+    <string name="login_button">Iniciar Sesión</string>
+    <string name="login_error">Error al iniciar sesión</string>
+    
+    <!-- Dashboard -->
+    <string name="dashboard_title">Dashboard</string>
+    <string name="prestamos_activos">Préstamos Activos</string>
+    <string name="monto_total">Monto Total</string>
+    <string name="prestamos_vencidos">Préstamos Vencidos</string>
+    <string name="cobros_hoy">Cobros Hoy</string>
+    
+    <!-- Préstamos -->
+    <string name="prestamos_title">Préstamos</string>
+    <string name="nuevo_prestamo">Nuevo Préstamo</string>
+    <string name="detalle_prestamo">Detalle del Préstamo</string>
+    <string name="numero_prestamo">Número</string>
+    <string name="cliente">Cliente</string>
+    <string name="monto">Monto</string>
+    <string name="cuota">Cuota</string>
+    <string name="estado">Estado</string>
+    
+    <!-- Clientes -->
+    <string name="clientes_title">Clientes</string>
+    <string name="nuevo_cliente">Nuevo Cliente</string>
+    <string name="detalle_cliente">Detalle del Cliente</string>
+    <string name="cedula">Cédula</string>
+    <string name="nombre">Nombre</string>
+    <string name="apellido">Apellido</string>
+    <string name="telefono">Teléfono</string>
+    <string name="direccion">Dirección</string>
+    <string name="buscar_cliente">Buscar cliente...</string>
+    
+    <!-- Rutas -->
+    <string name="rutas_title">Rutas</string>
+    <string name="nueva_ruta">Nueva Ruta</string>
+    <string name="detalle_ruta">Detalle de la Ruta</string>
+    <string name="nombre_ruta">Nombre de la Ruta</string>
+    <string name="fecha_ruta">Fecha</string>
+    <string name="supervisor">Supervisor</string>
+    <string name="cobrador">Cobrador</string>
+    <string name="visitas">Visitas</string>
+    
+    <!-- Pagos -->
+    <string name="pagos_title">Pagos</string>
+    <string name="registrar_pago">Registrar Pago</string>
+    <string name="recibo">Recibo</string>
+    <string name="metodo_pago">Método de Pago</string>
+    <string name="fecha_pago">Fecha de Pago</string>
+    
+    <!-- Acciones -->
+    <string name="crear">Crear</string>
+    <string name="guardar">Guardar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="actualizar">Actualizar</string>
+    <string name="eliminar">Eliminar</string>
+    <string name="editar">Editar</string>
+    <string name="ver_detalle">Ver Detalle</string>
+    
+    <!-- Mensajes -->
+    <string name="error_cargar">Error al cargar datos</string>
+    <string name="error_guardar">Error al guardar</string>
+    <string name="exito_guardar">Guardado exitosamente</string>
+    <string name="cargando">Cargando...</string>
+    <string name="sin_datos">No hay datos disponibles</string>
+    
+    <!-- Validaciones -->
+    <string name="campo_requerido">Este campo es requerido</string>
+    <string name="email_invalido">Email inválido</string>
+    <string name="cedula_invalida">Cédula inválida</string>
+</resources>
+

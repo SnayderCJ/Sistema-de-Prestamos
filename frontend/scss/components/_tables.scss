@@ -1,0 +1,74 @@
+// ============================================
+// Tablas
+// ============================================
+
+.table {
+  width: 100%;
+  background: $bg-primary;
+  border-radius: $border-radius-lg;
+  overflow: hidden;
+  box-shadow: $shadow-sm;
+  
+  &-responsive {
+    overflow-x: auto;
+    @include custom-scrollbar;
+  }
+  
+  thead {
+    background-color: $bg-light;
+    
+    th {
+      padding: $spacing-md;
+      text-align: left;
+      font-weight: $font-weight-semibold;
+      font-size: $font-size-sm;
+      color: $text-secondary;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 2px solid $border-color;
+    }
+  }
+  
+  tbody {
+    tr {
+      border-bottom: $border-width solid $border-color;
+      transition: background-color $transition-base;
+      
+      &:hover {
+        background-color: $bg-secondary;
+      }
+      
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+    
+    td {
+      padding: $spacing-md;
+      font-size: $font-size-sm;
+      color: $text-primary;
+    }
+  }
+  
+  &-striped {
+    tbody tr:nth-child(odd) {
+      background-color: $bg-secondary;
+    }
+  }
+  
+  &-hover {
+    tbody tr {
+      cursor: pointer;
+    }
+  }
+  
+  &-sm {
+    thead th,
+    tbody td {
+      padding: $spacing-sm;
+      font-size: $font-size-xs;
+    }
+  }
+}
+
+

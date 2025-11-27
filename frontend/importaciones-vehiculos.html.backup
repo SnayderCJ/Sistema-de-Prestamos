@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Importaciones de Vehículos - ImaxPrestamos</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <div class="header-logo">💰 ImaxPrestamos</div>
+            <nav class="header-nav">
+                <a href="index.html">Dashboard</a>
+                <a href="vehiculos.html">Vehículos</a>
+            </nav>
+            <div class="header-user">
+                <button class="btn btn-ghost btn-sm" onclick="logout()">Salir</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-layout">
+        <aside class="sidebar">
+            <nav class="sidebar-menu">
+                <div class="sidebar-menu-item">
+                    <a href="index.html">📊 Dashboard</a>
+                </div>
+                <div class="sidebar-menu-item">
+                    <a href="vehiculos.html">🚗 Vehículos</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1>Importaciones de Vehículos</h1>
+                <button class="btn btn-primary" onclick="abrirModalImportacion()">Nueva Importación</button>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>Importaciones Registradas</h2>
+                </div>
+                <div class="table-responsive">
+                    <table class="table" id="tablaImportaciones">
+                        <thead>
+                            <tr>
+                                <th>Vehículo</th>
+                                <th>Puerto</th>
+                                <th>Fecha Llegada</th>
+                                <th>Costo Importación</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="6" class="text-center">Cargando...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Importación -->
+    <div class="modal" id="modalImportacion">
+        <div class="modal-backdrop" onclick="cerrarModalImportacion()"></div>
+        <div class="modal-dialog modal-lg">
+            <div class="modal-header">
+                <h3>Nueva Importación</h3>
+                <button class="modal-close" onclick="cerrarModalImportacion()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="formImportacion" onsubmit="crearImportacion(event)">
+                    <div class="form-group">
+                        <label>Vehículo *</label>
+                        <select class="form-control" id="vehiculoImportacion" required>
+                            <option value="">Seleccionar...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Puerto de Entrada *</label>
+                        <select class="form-control" id="puerto" required>
+                            <option value="">Seleccionar...</option>
+                            <option value="santo_domingo">Santo Domingo</option>
+                            <option value="haina">Haina</option>
+                            <option value="puerto_plata">Puerto Plata</option>
+                            <option value="la_romana">La Romana</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Fecha de Llegada *</label>
+                            <input type="date" class="form-control" id="fechaLlegada" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha de Despacho</label>
+                            <input type="date" class="form-control" id="fechaDespacho">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Costo FOB *</label>
+                            <input type="number" class="form-control" id="costoFOB" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Costo Flete</label>
+                            <input type="number" class="form-control" id="costoFlete" step="0.01">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Seguro</label>
+                            <input type="number" class="form-control" id="seguro" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label>Impuestos</label>
+                            <input type="number" class="form-control" id="impuestos" step="0.01">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Número de Contenedor</label>
+                        <input type="text" class="form-control" id="numeroContenedor">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Observaciones</label>
+                        <textarea class="form-control" id="observacionesImportacion" rows="3"></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="cerrarModalImportacion()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/importaciones-vehiculos.js"></script>
+</body>
+</html>
+

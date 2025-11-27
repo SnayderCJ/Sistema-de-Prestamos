@@ -1,0 +1,23 @@
+{
+  "name": "imaxprestamos-frontend",
+  "version": "1.0.0",
+  "description": "ImaxPrestamos - Frontend Web con SASS",
+  "scripts": {
+    "sass": "sass scss:css --watch",
+    "sass:build": "sass scss:css --style compressed",
+    "dev": "live-server --port=3000 --open=/index.html",
+    "build": "npm run sass:build"
+  },
+  "keywords": [
+    "prestamos",
+    "erp",
+    "sass"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "sass": "^1.69.5",
+    "live-server": "^1.2.2"
+  }
+}
+

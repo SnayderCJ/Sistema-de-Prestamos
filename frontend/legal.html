@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asientos Legales - ImaxPrestamos</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <!-- Header Component -->
+    <div data-component="header"></div>
+
+    <div class="main-layout">
+        <!-- Sidebar Component -->
+        <div data-component="sidebar"></div>
+
+        <main class="main-content" role="main">
+            <div class="page-header">
+                <h1>Asientos Legales</h1>
+                <button class="btn btn-primary" onclick="abrirModalAsiento()">Nuevo Asiento Legal</button>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>Filtros</h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Tipo</label>
+                            <select class="form-control" id="filtroTipo">
+                                <option value="">Todos</option>
+                                <option value="apertura">Apertura</option>
+                                <option value="cierre">Cierre</option>
+                                <option value="ajuste">Ajuste</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha Desde</label>
+                            <input type="date" class="form-control" id="filtroFechaDesde">
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha Hasta</label>
+                            <input type="date" class="form-control" id="filtroFechaHasta">
+                        </div>
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <button class="btn btn-primary" onclick="cargarAsientos()">Buscar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>Asientos Legales Registrados</h2>
+                </div>
+                <div class="table-responsive">
+                    <table class="table" id="tablaAsientos">
+                        <thead>
+                            <tr>
+                                <th>Número</th>
+                                <th>Tipo</th>
+                                <th>Fecha</th>
+                                <th>Descripción</th>
+                                <th>Monto Total</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="7" class="text-center">Cargando...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Asiento Legal -->
+    <div class="modal" id="modalAsiento">
+        <div class="modal-backdrop" onclick="cerrarModalAsiento()"></div>
+        <div class="modal-dialog modal-lg">
+            <div class="modal-header">
+                <h3>Nuevo Asiento Legal</h3>
+                <button class="modal-close" onclick="cerrarModalAsiento()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="formAsiento" onsubmit="crearAsiento(event)">
+                    <div class="form-group">
+                        <label>Tipo de Asiento *</label>
+                        <select class="form-control" id="tipoAsiento" required>
+                            <option value="">Seleccionar...</option>
+                            <option value="apertura">Apertura</option>
+                            <option value="cierre">Cierre</option>
+                            <option value="ajuste">Ajuste</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Fecha *</label>
+                        <input type="date" class="form-control" id="fechaAsiento" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Descripción *</label>
+                        <textarea class="form-control" id="descripcionAsiento" rows="3" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Referencia Legal</label>
+                        <input type="text" class="form-control" id="referenciaLegal">
+                    </div>
+
+                    <div id="partidasAsiento">
+                        <h4>Partidas del Asiento</h4>
+                        <div id="listaPartidas"></div>
+                        <button type="button" class="btn btn-sm btn-secondary" onclick="agregarPartida()">Agregar Partida</button>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="cerrarModalAsiento()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/legal.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Departamentos - ImaxPrestamos</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <div class="header-logo">💰 ImaxPrestamos</div>
+            <nav class="header-nav">
+                <a href="index.html">Dashboard</a>
+                <a href="empleados.html">Empleados</a>
+            </nav>
+            <div class="header-user">
+                <button class="btn btn-ghost btn-sm" onclick="logout()">Salir</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-layout">
+        <aside class="sidebar">
+            <nav class="sidebar-menu">
+                <div class="sidebar-menu-item">
+                    <a href="index.html">📊 Dashboard</a>
+                </div>
+                <div class="sidebar-menu-item">
+                    <a href="empleados.html">👥 Empleados</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1>Departamentos</h1>
+                <button class="btn btn-primary" onclick="abrirModalDepartamento()">Nuevo Departamento</button>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>Listado de Departamentos</h2>
+                </div>
+                <div class="table-responsive">
+                    <table class="table" id="tablaDepartamentos">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Descripción</th>
+                                <th>Empleados</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="5" class="text-center">Cargando...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Departamento -->
+    <div class="modal" id="modalDepartamento">
+        <div class="modal-backdrop" onclick="cerrarModalDepartamento()"></div>
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 id="tituloModalDepartamento">Nuevo Departamento</h3>
+                <button class="modal-close" onclick="cerrarModalDepartamento()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="formDepartamento" onsubmit="guardarDepartamento(event)">
+                    <input type="hidden" id="departamentoId">
+                    
+                    <div class="form-group">
+                        <label>Nombre *</label>
+                        <input type="text" class="form-control" id="nombreDepartamento" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Descripción</label>
+                        <textarea class="form-control" id="descripcionDepartamento" rows="3"></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="cerrarModalDepartamento()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/departamentos.js"></script>
+</body>
+</html>
+

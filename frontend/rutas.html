@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rutas - ImaxPrestamos</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <!-- Header Component -->
+    <div data-component="header"></div>
+
+    <div class="main-layout">
+        <!-- Sidebar Component -->
+        <div data-component="sidebar"></div>
+
+        <main class="main-content" role="main">
+            <div class="rutas">
+                <div class="rutas-header">
+                    <h1>Gestión de Rutas</h1>
+                    <button class="btn btn-primary" onclick="abrirModalCrear()">➕ Nueva Ruta</button>
+                </div>
+
+                <div class="rutas-filters">
+                    <div class="form-group">
+                        <label class="form-label">Estado</label>
+                        <select class="form-control" id="filtroEstado" onchange="filtrarRutas()">
+                            <option value="">Todos</option>
+                            <option value="programada">Programada</option>
+                            <option value="en_proceso">En Proceso</option>
+                            <option value="completada">Completada</option>
+                            <option value="cancelada">Cancelada</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Fecha Desde</label>
+                        <input type="date" class="form-control" id="filtroFechaDesde" onchange="filtrarRutas()">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Fecha Hasta</label>
+                        <input type="date" class="form-control" id="filtroFechaHasta" onchange="filtrarRutas()">
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Supervisor</th>
+                                <th>Cobrador</th>
+                                <th>Fecha</th>
+                                <th>Estado</th>
+                                <th>Visitas</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyRutas">
+                            <tr><td colspan="7" class="text-center"><div class="loading"><div class="loading-spinner"></div></div></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Crear Ruta -->
+    <div class="modal" id="modalCrearRuta">
+        <div class="modal-backdrop" onclick="cerrarModalCrear()"></div>
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 class="modal-title">Nueva Ruta</h3>
+                <button class="modal-close" onclick="cerrarModalCrear()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="formCrearRuta">
+                    <div class="form-group">
+                        <label class="form-label">Nombre de la Ruta *</label>
+                        <input type="text" class="form-control" id="nombreRuta" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Fecha *</label>
+                        <input type="date" class="form-control" id="fechaRuta" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Cobrador</label>
+                        <select class="form-control" id="cobradorId">
+                            <option value="">Seleccionar cobrador...</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="cerrarModalCrear()">Cancelar</button>
+                <button class="btn btn-primary" onclick="crearRuta()">Crear Ruta</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Detalle Ruta -->
+    <div class="modal" id="modalDetalleRuta">
+        <div class="modal-backdrop" onclick="cerrarModalDetalle()"></div>
+        <div class="modal-dialog modal-lg">
+            <div class="modal-header">
+                <h3 class="modal-title">Detalle de Ruta</h3>
+                <button class="modal-close" onclick="cerrarModalDetalle()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="grid grid-2">
+                    <div>
+                        <h4>Información General</h4>
+                        <table class="table">
+                            <tr>
+                                <th>Nombre:</th>
+                                <td id="detalleNombreRuta">-</td>
+                            </tr>
+                            <tr>
+                                <th>Supervisor:</th>
+                                <td id="detalleSupervisor">-</td>
+                            </tr>
+                            <tr>
+                                <th>Cobrador:</th>
+                                <td id="detalleCobrador">-</td>
+                            </tr>
+                            <tr>
+                                <th>Fecha:</th>
+                                <td id="detalleFecha">-</td>
+                            </tr>
+                            <tr>
+                                <th>Estado:</th>
+                                <td><span id="detalleEstado" class="badge">-</span></td>
+                            </tr>
+                            <tr>
+                                <th>Total Visitas:</th>
+                                <td id="detalleTotalVisitas">-</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="cerrarModalDetalle()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/rutas.js"></script>
+</body>
+</html>
+
+

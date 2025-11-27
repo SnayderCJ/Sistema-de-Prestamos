@@ -1,0 +1,76 @@
+// ============================================
+// Sidebar
+// ============================================
+
+.sidebar {
+  width: 260px;
+  background: $bg-primary;
+  box-shadow: $shadow-md;
+  height: calc(100vh - 64px);
+  position: fixed;
+  left: 0;
+  top: 64px;
+  overflow-y: auto;
+  @include custom-scrollbar;
+  transition: transform $transition-base;
+  
+  @include respond-to(md) {
+    position: relative;
+    top: 0;
+    height: 100vh;
+  }
+  
+  &-menu {
+    padding: $spacing-lg;
+    
+    &-item {
+      margin-bottom: $spacing-xs;
+      
+      a {
+        display: flex;
+        align-items: center;
+        gap: $spacing-md;
+        padding: $spacing-md;
+        border-radius: $border-radius-md;
+        color: $text-secondary;
+        transition: all $transition-base;
+        
+        &:hover {
+          background-color: $bg-secondary;
+          color: $primary-color;
+        }
+        
+        &.active {
+          background-color: rgba($primary-color, 0.1);
+          color: $primary-color;
+          font-weight: $font-weight-semibold;
+        }
+        
+        .icon {
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+    
+    &-title {
+      font-size: $font-size-xs;
+      font-weight: $font-weight-semibold;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: $text-muted;
+      margin: $spacing-lg 0 $spacing-sm;
+      padding: 0 $spacing-md;
+    }
+  }
+  
+  &-collapsed {
+    transform: translateX(-100%);
+    
+    @include respond-to(md) {
+      transform: translateX(0);
+    }
+  }
+}
+
+

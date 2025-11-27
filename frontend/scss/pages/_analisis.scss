@@ -1,0 +1,19 @@
+// ============================================
+// Página de Análisis
+// ============================================
+
+.analisis {
+  padding: $spacing-xl;
+  
+  &-chart {
+    margin-bottom: $spacing-xl;
+  }
+  
+  &-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: $spacing-lg;
+  }
+}
+
+

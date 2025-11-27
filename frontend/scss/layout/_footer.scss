@@ -1,0 +1,25 @@
+// ============================================
+// Footer
+// ============================================
+
+.footer {
+  background: $bg-primary;
+  border-top: $border-width solid $border-color;
+  padding: $spacing-lg;
+  margin-top: auto;
+  
+  &-content {
+    @include flex-between;
+    max-width: 1920px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    gap: $spacing-md;
+  }
+  
+  &-text {
+    color: $text-secondary;
+    font-size: $font-size-sm;
+  }
+}
+
+

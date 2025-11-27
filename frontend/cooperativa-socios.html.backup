@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socios de Cooperativa - ERP Multicajas</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="header-logo">
+                💰 ERP Multicajas
+            </div>
+            <nav class="header-nav">
+                <a href="index.html">Dashboard</a>
+                <a href="cooperativas.html">Cooperativas</a>
+            </nav>
+            <div class="header-user">
+                <div class="header-user-info">
+                    <div class="avatar">JD</div>
+                    <span id="userName">Usuario</span>
+                </div>
+                <button class="btn btn-ghost btn-sm" onclick="logout()">Salir</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-layout">
+        <aside class="sidebar">
+            <nav class="sidebar-menu">
+                <div class="sidebar-menu-item">
+                    <a href="cooperativas.html"><span class="icon">←</span> Volver a Cooperativas</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1 id="tituloCooperativa">🤝 Socios de Cooperativa</h1>
+                <div>
+                    <button class="btn btn-primary" onclick="abrirModalSocio()">
+                        ➕ Agregar Socio
+                    </button>
+                    <button class="btn btn-success" onclick="abrirModalApartacion()">
+                        💰 Registrar Apartación
+                    </button>
+                    <button class="btn btn-info" onclick="abrirModalDistribucion()">
+                        📊 Distribución de Utilidades
+                    </button>
+                </div>
+            </div>
+
+            <!-- Estadísticas -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 id="totalSocios">0</h3>
+                            <p>Total de Socios</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 id="totalApartaciones">RD$ 0.00</h3>
+                            <p>Total Apartaciones</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 id="sociosConUtilidad">0</h3>
+                            <p>Socios con % Utilidad</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabla de Socios -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Cédula</th>
+                                    <th>Nombre</th>
+                                    <th>Total Apartaciones</th>
+                                    <th>% Utilidad</th>
+                                    <th>Última Apartación</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaSocios">
+                                <tr>
+                                    <td colspan="7" class="text-center">Cargando...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Socio -->
+    <div id="modalSocio" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Agregar Socio</h2>
+                <span class="close" onclick="cerrarModal('modalSocio')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="formSocio">
+                    <div class="form-group">
+                        <label>Cédula *</label>
+                        <input type="text" id="socioCedula" class="form-control" maxlength="11" required>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Nombre *</label>
+                                <input type="text" id="socioNombre" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Apellido</label>
+                                <input type="text" id="socioApellido" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Teléfono</label>
+                                <input type="text" id="socioTelefono" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" id="socioEmail" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Dirección</label>
+                        <textarea id="socioDireccion" class="form-control" rows="2"></textarea>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Fecha de Ingreso</label>
+                                <input type="date" id="socioFechaIngreso" class="form-control" value="${new Date().toISOString().split('T')[0]}">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>% Utilidad (Opcional)</label>
+                                <input type="number" id="socioPorcentajeUtilidad" class="form-control" step="0.01" min="0" max="100" placeholder="Ej: 5.5">
+                                <small class="text-muted">Dejar vacío si no aplica</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Observaciones</label>
+                        <textarea id="socioObservaciones" class="form-control" rows="2"></textarea>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="cerrarModal('modalSocio')">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Apartación -->
+    <div id="modalApartacion" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Registrar Apartación</h2>
+                <span class="close" onclick="cerrarModal('modalApartacion')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="formApartacion">
+                    <div class="form-group">
+                        <label>Socio *</label>
+                        <select id="apartacionSocioId" class="form-control" required>
+                            <option value="">Seleccionar socio</option>
+                        </select>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Fecha *</label>
+                                <input type="date" id="apartacionFecha" class="form-control" required value="${new Date().toISOString().split('T')[0]}">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Monto *</label>
+                                <input type="number" id="apartacionMonto" class="form-control" step="0.01" min="0.01" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Tipo de Apartación</label>
+                                <select id="apartacionTipo" class="form-control">
+                                    <option value="inicial">Inicial</option>
+                                    <option value="adicional" selected>Adicional</option>
+                                    <option value="mensual">Mensual</option>
+                                    <option value="extraordinaria">Extraordinaria</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Método de Pago</label>
+                                <select id="apartacionMetodoPago" class="form-control">
+                                    <option value="">Seleccionar</option>
+                                    <option value="efectivo">Efectivo</option>
+                                    <option value="transferencia">Transferencia</option>
+                                    <option value="cheque">Cheque</option>
+                                    <option value="tarjeta">Tarjeta</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Número de Comprobante</label>
+                        <input type="text" id="apartacionComprobante" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Observaciones</label>
+                        <textarea id="apartacionObservaciones" class="form-control" rows="2"></textarea>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="cerrarModal('modalApartacion')">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Registrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Distribución Utilidades -->
+    <div id="modalDistribucion" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2>Distribución de Utilidades</h2>
+                <span class="close" onclick="cerrarModal('modalDistribucion')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="formDistribucion">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Período *</label>
+                                <input type="month" id="distribucionPeriodo" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Monto Total Utilidad *</label>
+                                <input type="number" id="distribucionMonto" class="form-control" step="0.01" min="0.01" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Método de Distribución</label>
+                                <select id="distribucionMetodo" class="form-control">
+                                    <option value="por_apartaciones" selected>Por Apartaciones</option>
+                                    <option value="porcentaje">Por Porcentaje Asignado</option>
+                                    <option value="igual">Igual para Todos</option>
+                                    <option value="mixto">Mixto (50% apartaciones, 50% porcentaje)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="cerrarModal('modalDistribucion')">Cancelar</button>
+                        <button type="button" class="btn btn-info" onclick="calcularDistribucion()">Calcular</button>
+                        <button type="submit" class="btn btn-primary">Guardar Distribución</button>
+                    </div>
+                </form>
+                
+                <div id="resultadoDistribucion" class="mt-4" style="display: none;">
+                    <h3>Resultado de la Distribución</h3>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Socio</th>
+                                    <th>Apartaciones Período</th>
+                                    <th>% Asignado</th>
+                                    <th>Monto Utilidad</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaDistribucion">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/cooperativa-socios.js"></script>
+</body>
+</html>
+

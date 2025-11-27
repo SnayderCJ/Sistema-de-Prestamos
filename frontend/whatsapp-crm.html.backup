@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM WhatsApp - ImaxPrestamos</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <div class="header-logo">💰 ImaxPrestamos</div>
+            <nav class="header-nav">
+                <a href="index.html">Dashboard</a>
+                <a href="notificaciones.html">Notificaciones</a>
+            </nav>
+            <div class="header-user">
+                <button class="btn btn-ghost btn-sm" onclick="logout()">Salir</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-layout">
+        <aside class="sidebar">
+            <nav class="sidebar-menu">
+                <div class="sidebar-menu-item">
+                    <a href="index.html">📊 Dashboard</a>
+                </div>
+                <div class="sidebar-menu-item">
+                    <a href="notificaciones.html">🔔 Notificaciones</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1>CRM WhatsApp</h1>
+                <button class="btn btn-primary" onclick="abrirModalEnviar()">Enviar Mensaje</button>
+            </div>
+
+            <!-- Estadísticas -->
+            <div class="dashboard-stats">
+                <div class="card">
+                    <div class="card-stat">
+                        <span class="card-stat-value" id="totalEnviados">0</span>
+                        <span class="card-stat-label">Mensajes Enviados</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-stat">
+                        <span class="card-stat-value" id="totalRecibidos">0</span>
+                        <span class="card-stat-label">Mensajes Recibidos</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-stat">
+                        <span class="card-stat-value" id="totalConversaciones">0</span>
+                        <span class="card-stat-label">Conversaciones</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filtros -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Filtros</h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Buscar</label>
+                            <input type="text" class="form-control" id="buscarConversacion" placeholder="Número o mensaje..." onkeyup="cargarConversaciones()">
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha Desde</label>
+                            <input type="date" class="form-control" id="filtroFechaDesde" onchange="cargarConversaciones()">
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha Hasta</label>
+                            <input type="date" class="form-control" id="filtroFechaHasta" onchange="cargarConversaciones()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conversaciones -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Conversaciones</h2>
+                </div>
+                <div class="table-responsive">
+                    <table class="table" id="tablaConversaciones">
+                        <thead>
+                            <tr>
+                                <th>Número</th>
+                                <th>Último Mensaje</th>
+                                <th>Total Mensajes</th>
+                                <th>Última Conversación</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="5" class="text-center">Cargando...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Historial -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Historial de Mensajes</h2>
+                </div>
+                <div class="table-responsive">
+                    <table class="table" id="tablaHistorial">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Número</th>
+                                <th>Mensaje</th>
+                                <th>Tipo</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="5" class="text-center">Cargando...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Enviar Mensaje -->
+    <div class="modal" id="modalEnviar">
+        <div class="modal-backdrop" onclick="cerrarModalEnviar()"></div>
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3>Enviar Mensaje WhatsApp</h3>
+                <button class="modal-close" onclick="cerrarModalEnviar()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="formEnviar" onsubmit="enviarMensaje(event)">
+                    <div class="form-group">
+                        <label>Cliente (Opcional)</label>
+                        <select class="form-control" id="clienteEnviar" onchange="cargarTelefonoCliente()">
+                            <option value="">Seleccionar cliente...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Número de Teléfono *</label>
+                        <input type="text" class="form-control" id="numeroEnviar" placeholder="8091234567" required>
+                        <small>Incluir código de país (1 para RD)</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Mensaje *</label>
+                        <textarea class="form-control" id="mensajeEnviar" rows="6" required></textarea>
+                        <small id="contadorCaracteres">0 / 4096 caracteres</small>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="cerrarModalEnviar()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Enviar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Ver Conversación -->
+    <div class="modal" id="modalConversacion">
+        <div class="modal-backdrop" onclick="cerrarModalConversacion()"></div>
+        <div class="modal-dialog modal-lg">
+            <div class="modal-header">
+                <h3 id="tituloConversacion">Conversación</h3>
+                <button class="modal-close" onclick="cerrarModalConversacion()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="mensajesConversacion" style="max-height: 400px; overflow-y: auto;">
+                    <!-- Mensajes aquí -->
+                </div>
+                <div class="form-group" style="margin-top: 20px;">
+                    <textarea class="form-control" id="respuestaRapida" rows="3" placeholder="Escribir respuesta..."></textarea>
+                    <button class="btn btn-primary" onclick="enviarRespuestaRapida()" style="margin-top: 10px;">Enviar Respuesta</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/whatsapp-crm.js"></script>
+</body>
+</html>
+

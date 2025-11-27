@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financiamientos de Vehículos - ImaxPrestamos</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="header-logo">
+                💰 ImaxPrestamos
+            </div>
+            <nav class="header-nav">
+                <a href="index.html">Dashboard</a>
+                <a href="prestamos.html">Préstamos</a>
+                <a href="financiamientos-vehiculos.html" class="active">Financiamientos</a>
+            </nav>
+            <div class="header-user">
+                <div class="header-user-info">
+                    <div class="avatar">JD</div>
+                    <span id="userName">Usuario</span>
+                </div>
+                <button class="btn btn-ghost btn-sm" onclick="logout()">Salir</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-layout">
+        <aside class="sidebar">
+            <nav class="sidebar-menu">
+                <div class="sidebar-menu-title">Principal</div>
+                <div class="sidebar-menu-item">
+                    <a href="index.html"><span class="icon">📊</span> Dashboard</a>
+                </div>
+                <div class="sidebar-menu-item">
+                    <a href="prestamos.html"><span class="icon">💵</span> Préstamos</a>
+                </div>
+                
+                <div class="sidebar-menu-title">Vehículos</div>
+                <div class="sidebar-menu-item">
+                    <a href="financiamientos-vehiculos.html" class="active"><span class="icon">🚗</span> Financiamientos</a>
+                </div>
+                <div class="sidebar-menu-item">
+                    <a href="vehiculos.html"><span class="icon">🚙</span> Inventario</a>
+                </div>
+                <div class="sidebar-menu-item">
+                    <a href="importaciones-vehiculos.html"><span class="icon">📦</span> Importaciones</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1>Financiamientos de Vehículos</h1>
+                <button class="btn btn-primary" onclick="nuevoFinanciamiento()">
+                    <span class="icon">➕</span> Nuevo Financiamiento
+                </button>
+            </div>
+
+            <!-- Filtros -->
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="filters">
+                        <select id="filtroTipo" class="form-control form-control-sm">
+                            <option value="">Todos los tipos</option>
+                            <option value="propio">Propio</option>
+                            <option value="externo">Externo</option>
+                        </select>
+                        <select id="filtroEstado" class="form-control form-control-sm">
+                            <option value="">Todos los estados</option>
+                            <option value="pendiente">Pendiente</option>
+                            <option value="aprobado">Aprobado</option>
+                            <option value="vigente">Vigente</option>
+                            <option value="vencido">Vencido</option>
+                        </select>
+                        <input type="text" id="filtroCliente" class="form-control form-control-sm" placeholder="Cliente">
+                        <button class="btn btn-secondary btn-sm" onclick="filtrarFinanciamientos()">Filtrar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lista de Financiamientos -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Lista de Financiamientos</h2>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Número</th>
+                                    <th>Cliente</th>
+                                    <th>Vehículo</th>
+                                    <th>Tipo</th>
+                                    <th>Valor Financiado</th>
+                                    <th>Cuota Mensual</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaFinanciamientos">
+                                <tr>
+                                    <td colspan="8" class="text-center">Cargando...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Nuevo Financiamiento -->
+    <div id="modalFinanciamiento" class="modal" style="display: none;">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h2>Nuevo Financiamiento de Vehículo</h2>
+                <button class="modal-close" onclick="cerrarModal('modalFinanciamiento')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="formFinanciamiento">
+                    <div class="tabs">
+                        <button type="button" class="tab-btn active" onclick="cambiarTab('datos-cliente', this)">Datos Cliente</button>
+                        <button type="button" class="tab-btn" onclick="cambiarTab('datos-vehiculo', this)">Datos Vehículo</button>
+                        <button type="button" class="tab-btn" onclick="cambiarTab('financiamiento', this)">Financiamiento</button>
+                        <button type="button" class="tab-btn" onclick="cambiarTab('garantias', this)">Garantías</button>
+                    </div>
+
+                    <!-- Tab Datos Cliente -->
+                    <div id="tab-datos-cliente" class="tab-content active">
+                        <div class="form-group">
+                            <label>Cliente *</label>
+                            <select class="form-control" id="clienteId" required onchange="cargarDatosCliente()">
+                                <option value="">Seleccionar cliente</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Tipo de Financiamiento *</label>
+                            <select class="form-control" id="tipoFinanciamiento" required>
+                                <option value="">Seleccionar tipo</option>
+                                <option value="propio">Propio</option>
+                                <option value="externo">Externo</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Tab Datos Vehículo -->
+                    <div id="tab-datos-vehiculo" class="tab-content">
+                        <div class="grid grid-2">
+                            <div class="form-group">
+                                <label>Marca *</label>
+                                <input type="text" class="form-control" id="marca" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Modelo *</label>
+                                <input type="text" class="form-control" id="modelo" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Año *</label>
+                                <input type="number" class="form-control" id="ano" required min="1900" max="2099">
+                            </div>
+                            <div class="form-group">
+                                <label>Color</label>
+                                <input type="text" class="form-control" id="color">
+                            </div>
+                            <div class="form-group">
+                                <label>Número de Chasis *</label>
+                                <input type="text" class="form-control" id="numeroChasis" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Número de Motor</label>
+                                <input type="text" class="form-control" id="numeroMotor">
+                            </div>
+                            <div class="form-group">
+                                <label>Número de Placa</label>
+                                <input type="text" class="form-control" id="numeroPlaca">
+                            </div>
+                            <div class="form-group">
+                                <label>Kilometraje</label>
+                                <input type="number" class="form-control" id="kilometraje" min="0">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Valor Comercial (RD$)</label>
+                            <input type="number" step="0.01" class="form-control" id="valorComercial">
+                        </div>
+                    </div>
+
+                    <!-- Tab Financiamiento -->
+                    <div id="tab-financiamiento" class="tab-content">
+                        <div class="grid grid-2">
+                            <div class="form-group">
+                                <label>Valor Financiado (RD$) *</label>
+                                <input type="number" step="0.01" class="form-control" id="valorFinanciado" required onchange="calcularCuota()">
+                            </div>
+                            <div class="form-group">
+                                <label>Monto Inicial (RD$)</label>
+                                <input type="number" step="0.01" class="form-control" id="montoInicial" value="0" onchange="calcularCuota()">
+                            </div>
+                            <div class="form-group">
+                                <label>Plazo (Meses) *</label>
+                                <input type="number" class="form-control" id="plazoMeses" required min="1" onchange="calcularCuota()">
+                            </div>
+                            <div class="form-group">
+                                <label>Tasa de Interés Mensual (%) *</label>
+                                <input type="number" step="0.01" class="form-control" id="tasaInteres" required value="2.5" onchange="calcularCuota()">
+                            </div>
+                            <div class="form-group">
+                                <label>Cuota Mensual (RD$)</label>
+                                <input type="number" step="0.01" class="form-control" id="cuotaMensual" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label>Moneda *</label>
+                                <select class="form-control" id="monedaId" required>
+                                    <option value="1">DOP - Peso Dominicano</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Banco</label>
+                            <select class="form-control" id="bancoId">
+                                <option value="">Seleccionar banco</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Tab Garantías -->
+                    <div id="tab-garantias" class="tab-content">
+                        <div class="form-group">
+                            <label>Seguro Afiliado</label>
+                            <input type="text" class="form-control" id="seguroAfiliado">
+                        </div>
+                        <div class="grid grid-2">
+                            <div class="form-group">
+                                <label>Número de Póliza</label>
+                                <input type="text" class="form-control" id="numeroPolizaSeguro">
+                            </div>
+                            <div class="form-group">
+                                <label>Fecha Vencimiento Seguro</label>
+                                <input type="date" class="form-control" id="fechaVencimientoSeguro">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Tasador</label>
+                            <input type="text" class="form-control" id="tasador">
+                        </div>
+                        <div class="grid grid-2">
+                            <div class="form-group">
+                                <label>Fecha Tasación</label>
+                                <input type="date" class="form-control" id="fechaTasacion">
+                            </div>
+                            <div class="form-group">
+                                <label>Valor Tasación (RD$)</label>
+                                <input type="number" step="0.01" class="form-control" id="valorTasacion">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Observaciones</label>
+                            <textarea class="form-control" id="observaciones" rows="3"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="cerrarModal('modalFinanciamiento')">Cancelar</button>
+                <button class="btn btn-primary" onclick="confirmarFinanciamiento()">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Detalle Financiamiento -->
+    <div id="modalDetalleFinanciamiento" class="modal" style="display: none;">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h2>Detalle de Financiamiento #<span id="detalleFinanciamientoId"></span></h2>
+                <button class="modal-close" onclick="cerrarModal('modalDetalleFinanciamiento')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="grid grid-2">
+                    <div>
+                        <h3>Información del Cliente</h3>
+                        <table class="table">
+                            <tr>
+                                <th>Cliente:</th>
+                                <td id="detalleFinanciamientoCliente">-</td>
+                            </tr>
+                            <tr>
+                                <th>Banco:</th>
+                                <td id="detalleFinanciamientoBanco">-</td>
+                            </tr>
+                            <tr>
+                                <th>Moneda:</th>
+                                <td id="detalleFinanciamientoMoneda">-</td>
+                            </tr>
+                            <tr>
+                                <th>Fecha:</th>
+                                <td id="detalleFinanciamientoFecha">-</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div>
+                        <h3>Información del Vehículo</h3>
+                        <table class="table">
+                            <tr>
+                                <th>Marca:</th>
+                                <td id="detalleFinanciamientoMarca">-</td>
+                            </tr>
+                            <tr>
+                                <th>Modelo:</th>
+                                <td id="detalleFinanciamientoModelo">-</td>
+                            </tr>
+                            <tr>
+                                <th>Año:</th>
+                                <td id="detalleFinanciamientoAno">-</td>
+                            </tr>
+                            <tr>
+                                <th>Placa:</th>
+                                <td id="detalleFinanciamientoPlaca">-</td>
+                            </tr>
+                            <tr>
+                                <th>Número de Chasis:</th>
+                                <td id="detalleFinanciamientoChasis">-</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <h3>Información Financiera</h3>
+                    <table class="table">
+                        <tr>
+                            <th>Monto Financiamiento:</th>
+                            <td id="detalleFinanciamientoMonto">-</td>
+                        </tr>
+                        <tr>
+                            <th>Tasa de Interés:</th>
+                            <td id="detalleFinanciamientoTasa">-</td>
+                        </tr>
+                        <tr>
+                            <th>Plazo:</th>
+                            <td id="detalleFinanciamientoPlazo">-</td>
+                        </tr>
+                        <tr>
+                            <th>Cuota Mensual:</th>
+                            <td><strong id="detalleFinanciamientoCuota">-</strong></td>
+                        </tr>
+                        <tr>
+                            <th>Valor Tasación:</th>
+                            <td id="detalleFinanciamientoValorTasacion">-</td>
+                        </tr>
+                        <tr>
+                            <th>Fecha Tasación:</th>
+                            <td id="detalleFinanciamientoFechaTasacion">-</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="mt-3">
+                    <h3>Observaciones</h3>
+                    <p id="detalleFinanciamientoObservaciones">-</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="cerrarModal('modalDetalleFinanciamiento')">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/financiamientos-vehiculos.js"></script>
+</body>
+</html>
+

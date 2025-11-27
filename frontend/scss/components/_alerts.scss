@@ -1,0 +1,63 @@
+// Alerts Component
+
+.alert {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    min-width: 300px;
+    max-width: 500px;
+    padding: $spacing-md $spacing-lg;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 10000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    animation: slideIn 0.3s ease;
+    
+    &-success {
+        background-color: $success-color;
+        color: white;
+    }
+    
+    &-error {
+        background-color: $danger-color;
+        color: white;
+    }
+    
+    &-warning {
+        background-color: $warning-color;
+        color: white;
+    }
+    
+    &-info {
+        background-color: $info-color;
+        color: white;
+    }
+    
+    &-close {
+        background: none;
+        border: none;
+        color: inherit;
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 0;
+        margin-left: $spacing-md;
+        opacity: 0.8;
+        
+        &:hover {
+            opacity: 1;
+        }
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagos - ImaxPrestamos</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <!-- Header Component -->
+    <div data-component="header"></div>
+
+    <div class="main-layout">
+        <!-- Sidebar Component -->
+        <div data-component="sidebar"></div>
+
+        <!-- Main Content -->
+        <main class="main-content" role="main">
+            <div class="pagos">
+                <div class="pagos-header">
+                    <h1>Gestión de Pagos</h1>
+                    <div class="pagos-actions">
+                        <button class="btn btn-secondary" onclick="exportarPagosPDF()">
+                            📄 Exportar PDF
+                        </button>
+                        <button class="btn btn-secondary" onclick="exportarPagosExcel()">
+                            📊 Exportar Excel
+                        </button>
+                        <button class="btn btn-secondary" onclick="exportarPagosCSV()">
+                            📋 Exportar CSV
+                        </button>
+                        <button class="btn btn-primary" onclick="abrirModalCrear()">➕ Registrar Pago</button>
+                    </div>
+                </div>
+
+                <div class="pagos-filters">
+                    <div class="form-group">
+                        <label class="form-label">Préstamo</label>
+                        <input type="text" class="form-control" id="filtroPrestamo" placeholder="Número de préstamo" onkeyup="filtrarPagos()">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Fecha Desde</label>
+                        <input type="date" class="form-control" id="filtroFechaDesde" onchange="filtrarPagos()">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Fecha Hasta</label>
+                        <input type="date" class="form-control" id="filtroFechaHasta" onchange="filtrarPagos()">
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Número Recibo</th>
+                                <th>Préstamo</th>
+                                <th>Cliente</th>
+                                <th>Monto</th>
+                                <th>Método</th>
+                                <th>Fecha</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyPagos">
+                            <tr><td colspan="7" class="text-center"><div class="loading"><div class="loading-spinner"></div></div></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Registrar Pago -->
+    <div class="modal" id="modalCrearPago">
+        <div class="modal-backdrop" onclick="cerrarModalCrear()"></div>
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 class="modal-title">Registrar Pago</h3>
+                <button class="modal-close" onclick="cerrarModalCrear()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="formCrearPago">
+                    <div class="form-group">
+                        <label class="form-label">Préstamo *</label>
+                        <select class="form-control" id="prestamoId" required onchange="cargarCuotas()">
+                            <option value="">Seleccionar préstamo...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Cuota</label>
+                        <select class="form-control" id="cuotaId">
+                            <option value="">Todas las cuotas</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Monto *</label>
+                        <input type="number" class="form-control" id="monto" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Método de Pago *</label>
+                        <select class="form-control" id="metodoPago" required>
+                            <option value="efectivo">Efectivo</option>
+                            <option value="transferencia">Transferencia</option>
+                            <option value="cheque">Cheque</option>
+                            <option value="tarjeta">Tarjeta</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Número de Comprobante</label>
+                        <input type="text" class="form-control" id="numeroComprobante">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="cerrarModalCrear()">Cancelar</button>
+                <button class="btn btn-primary" onclick="registrarPago()">Registrar Pago</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/pagos.js"></script>
+</body>
+</html>
+
+

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hipotecas - ImaxPrestamos</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <!-- Header Component -->
+    <div data-component="header"></div>
+
+    <div class="main-layout">
+        <!-- Sidebar Component -->
+        <div data-component="sidebar"></div>
+
+        <main class="main-content" role="main">
+            <div class="page-header">
+                <h1>Hipotecas</h1>
+                <button class="btn btn-primary" onclick="abrirModalHipoteca()">Nueva Hipoteca</button>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>Hipotecas Registradas</h2>
+                </div>
+                <div class="table-responsive">
+                    <table class="table" id="tablaHipotecas">
+                        <thead>
+                            <tr>
+                                <th>Préstamo</th>
+                                <th>Cliente</th>
+                                <th>Propiedad</th>
+                                <th>Valor Avaluo</th>
+                                <th>Monto Hipotecado</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="7" class="text-center">Cargando...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Hipoteca -->
+    <div class="modal" id="modalHipoteca">
+        <div class="modal-backdrop" onclick="cerrarModalHipoteca()"></div>
+        <div class="modal-dialog modal-lg">
+            <div class="modal-header">
+                <h3>Nueva Hipoteca</h3>
+                <button class="modal-close" onclick="cerrarModalHipoteca()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="formHipoteca" onsubmit="crearHipoteca(event)">
+                    <div class="form-group">
+                        <label>Préstamo *</label>
+                        <select class="form-control" id="prestamoHipoteca" required>
+                            <option value="">Seleccionar...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tipo de Propiedad *</label>
+                        <select class="form-control" id="tipoPropiedad" required>
+                            <option value="">Seleccionar...</option>
+                            <option value="casa">Casa</option>
+                            <option value="apartamento">Apartamento</option>
+                            <option value="terreno">Terreno</option>
+                            <option value="local">Local Comercial</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Dirección de la Propiedad *</label>
+                        <textarea class="form-control" id="direccionPropiedad" rows="2" required></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Valor de Avaluo *</label>
+                            <input type="number" class="form-control" id="valorAvaluo" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Monto Hipotecado *</label>
+                            <input type="number" class="form-control" id="montoHipotecado" step="0.01" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Número de Escritura</label>
+                        <input type="text" class="form-control" id="numeroEscritura">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Fecha de Escritura</label>
+                        <input type="date" class="form-control" id="fechaEscritura">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Observaciones</label>
+                        <textarea class="form-control" id="observacionesHipoteca" rows="3"></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="cerrarModalHipoteca()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/hipotecas.js"></script>
+</body>
+</html>
+

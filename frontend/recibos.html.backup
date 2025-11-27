@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recibos - ImaxPrestamos</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="header-logo">
+                💰 ImaxPrestamos
+            </div>
+            <nav class="header-nav">
+                <a href="index.html">Dashboard</a>
+                <a href="pagos.html">Pagos</a>
+            </nav>
+            <div class="header-user">
+                <div class="header-user-info">
+                    <div class="avatar">JD</div>
+                    <span id="userName">Usuario</span>
+                </div>
+                <button class="btn btn-ghost btn-sm" onclick="logout()">Salir</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <nav class="sidebar-menu">
+                <div class="sidebar-menu-title">Operaciones</div>
+                <div class="sidebar-menu-item">
+                    <a href="pagos.html">
+                        <span class="icon">💳</span>
+                        Pagos
+                    </a>
+                </div>
+                <div class="sidebar-menu-item">
+                    <a href="recibos.html" class="active">
+                        <span class="icon">🧾</span>
+                        Recibos
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <h1>Recibos de Pago</h1>
+                <div class="page-actions">
+                    <button class="btn btn-secondary" onclick="exportarRecibos('pdf')">Exportar PDF</button>
+                    <button class="btn btn-secondary" onclick="exportarRecibos('excel')">Exportar Excel</button>
+                </div>
+            </div>
+
+            <!-- Filtros -->
+            <div class="filters-bar">
+                <input type="text" id="buscarRecibo" class="form-control" placeholder="Buscar por número, cliente..." onkeyup="filtrarRecibos()">
+                <select id="filtroPrestamo" class="form-control" onchange="cargarRecibos()">
+                    <option value="">Todos los préstamos</option>
+                </select>
+                <input type="date" id="filtroFechaDesde" class="form-control" onchange="cargarRecibos()">
+                <input type="date" id="filtroFechaHasta" class="form-control" onchange="cargarRecibos()">
+            </div>
+
+            <!-- Tabla de Recibos -->
+            <div class="table-responsive">
+                <table class="table" id="tablaRecibos">
+                    <thead>
+                        <tr>
+                            <th>Número</th>
+                            <th>Fecha</th>
+                            <th>Préstamo</th>
+                            <th>Cliente</th>
+                            <th>Monto</th>
+                            <th>Método</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="7" class="text-center">
+                                <div class="loading">
+                                    <div class="loading-spinner"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Paginación -->
+            <div class="pagination" id="paginacionRecibos"></div>
+        </main>
+    </div>
+
+    <!-- Modal Detalle Recibo -->
+    <div class="modal" id="modalDetalleRecibo">
+        <div class="modal-backdrop" onclick="cerrarModal('modalDetalleRecibo')"></div>
+        <div class="modal-dialog modal-lg">
+            <div class="modal-header">
+                <h3 class="modal-title">Detalle de Recibo</h3>
+                <button class="modal-close" onclick="cerrarModal('modalDetalleRecibo')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="contenidoRecibo">
+                    <div class="recibo-header">
+                        <h2>RECIBO DE PAGO</h2>
+                        <p><strong>Número:</strong> <span id="reciboNumero">-</span></p>
+                        <p><strong>Fecha:</strong> <span id="reciboFecha">-</span></p>
+                    </div>
+                    
+                    <div class="recibo-body">
+                        <div class="recibo-section">
+                            <h4>Información del Cliente</h4>
+                            <p><strong>Nombre:</strong> <span id="reciboClienteNombre">-</span></p>
+                            <p><strong>Cédula:</strong> <span id="reciboClienteCedula">-</span></p>
+                        </div>
+                        
+                        <div class="recibo-section">
+                            <h4>Información del Préstamo</h4>
+                            <p><strong>Número de Préstamo:</strong> <span id="reciboPrestamoNumero">-</span></p>
+                            <p><strong>Cuota:</strong> <span id="reciboCuota">-</span></p>
+                        </div>
+                        
+                        <div class="recibo-section">
+                            <h4>Detalle del Pago</h4>
+                            <table class="table">
+                                <tr>
+                                    <th>Capital:</th>
+                                    <td id="reciboCapital">-</td>
+                                </tr>
+                                <tr>
+                                    <th>Interés:</th>
+                                    <td id="reciboInteres">-</td>
+                                </tr>
+                                <tr>
+                                    <th>Mora:</th>
+                                    <td id="reciboMora">-</td>
+                                </tr>
+                                <tr>
+                                    <th><strong>Total:</strong></th>
+                                    <td><strong id="reciboTotal">-</strong></td>
+                                </tr>
+                            </table>
+                        </div>
+                        
+                        <div class="recibo-section">
+                            <p><strong>Método de Pago:</strong> <span id="reciboMetodoPago">-</span></p>
+                            <p><strong>Número de Comprobante:</strong> <span id="reciboComprobante">-</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="imprimirRecibo()">Imprimir</button>
+                <button class="btn btn-secondary" onclick="descargarReciboPDF()">Descargar PDF</button>
+                <button class="btn btn-secondary" onclick="cerrarModal('modalDetalleRecibo')">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/recibos.js"></script>
+</body>
+</html>
+

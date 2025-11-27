@@ -1,0 +1,51 @@
+// ============================================
+// ImaxPrestamos - Estilos Principales
+// Sistema de Gestión de Préstamos
+// ============================================
+
+// Variables
+@import 'variables';
+@import 'mixins';
+
+// Base
+@import 'base/reset';
+@import 'base/typography';
+@import 'base/utilities';
+
+// Layout
+@import 'layout/header';
+@import 'layout/sidebar';
+@import 'layout/footer';
+@import 'layout/grid';
+
+// Components
+@import 'components/buttons';
+@import 'components/forms';
+@import 'components/cards';
+@import 'components/tables';
+@import 'components/modals';
+@import 'components/alerts';
+@import 'components/badges';
+@import 'components/pagination';
+@import 'components/loading';
+@import 'components/tabs';
+@import 'components/dropdown';
+@import 'components/checkboxes';
+@import 'components/components';
+
+// Pages
+@import 'pages/login';
+@import 'pages/dashboard';
+@import 'pages/dashboard-avanzado';
+@import 'pages/notificaciones';
+@import 'pages/prestamos';
+@import 'pages/clientes';
+@import 'pages/rutas';
+@import 'pages/pagos';
+@import 'pages/analisis';
+@import 'pages/caja';
+
+// Responsive
+@import 'responsive/mobile';
+@import 'responsive/tablet';
+
