@@ -1,47 +1,57 @@
 # Estructura del Proyecto - ImaxPrestamos
 
-Este documento describe la estructura completa del proyecto y cómo usar el sistema de componentes.
+Este documento describe la estructura completa del proyecto y cómo aprovechar el sistema de componentes y estilos bajo la nueva organización.
 
-## 📁 Estructura de Directorios
+## 📁 Estructura de directorios
 
 ```
-frontend/
-├── components/          # Componentes HTML reutilizables
-│   ├── header.html     # Header de navegación
-│   └── sidebar.html    # Menú lateral
-├── templates/          # Plantillas base
-│   └── base.html       # Plantilla base para páginas
-├── js/
-│   ├── config.js       # Configuración de la aplicación
-│   ├── app.js          # Aplicación principal
-│   ├── utils.js        # Utilidades globales
-│   ├── components.js   # Sistema de carga de componentes
-│   ├── auth.js         # Módulo de autenticación
-│   └── [página].js     # Scripts específicos por página
-├── scss/
-│   ├── components/     # Estilos de componentes
-│   ├── layout/         # Estilos de layout
-│   ├── pages/          # Estilos específicos de páginas
-│   └── main.scss       # Archivo principal de estilos
-├── css/                # CSS compilado (generado)
-├── login.html          # Página de inicio de sesión
-├── register.html       # Página de registro
-└── [página].html       # Páginas de la aplicación
+nombre-proyecto/
+├── package.json
+├── api/                      # Backend (controllers, routes, middlewares)
+├── database/                 # Migraciones y scripts SQL
+└── frontend/
+    ├── package.json          # Dependencias del frontend (sass, live-server, cpx)
+    ├── src/                  # Código fuente editable
+    │   ├── scss/             # Variables, mixins, layout, componentes y páginas
+    │   ├── js/               # App.js, config.js, utils.js y scripts por página
+    │   └── assets/           # Imágenes originales, iconos SVG, fuentes
+    └── public/               # Artefactos servidos al navegador
+        ├── css/              # Resultado de compilar src/scss
+        ├── js/               # Copia/minificado desde src/js
+        ├── img/              # Activos optimizados desde src/assets
+        ├── *.html            # Copia de cada vista para exponer /login.html, /clientes.html, etc.
+        └── views/
+            ├── index.html    # Landing o redirecciones principales
+            ├── pages/        # Todas las vistas HTML del sistema
+            └── layouts/
+                ├── components/  # header.html, sidebar.html, etc.
+                └── templates/   # Plantillas base reutilizables
 ```
 
-## 🧩 Sistema de Componentes
+### Flujo de build
+
+1. Editas archivos dentro de `src/`.
+2. `npm run dev` ejecuta:
+   - `sass:watch`: compila `src/scss` → `public/css`
+   - `js:watch`: copia `src/js` → `public/js`
+   - `assets:watch`: copia `src/assets` → `public/img`
+   - `pages:watch`: copia `public/views/pages/*.html` hacia la raíz de `public/`
+   - `serve`: levanta `live-server` apuntando a `public/`
+3. `npm run build` genera CSS comprimido, copia JS/activos y ejecuta `pages:copy` para dejar las vistas listas en la raíz de `public/`.
+
+### Exponer vistas sin `/views/pages`
+
+Gracias a `pages:watch`/`pages:copy`, cualquier archivo en `public/views/pages/*.html` se duplica en `public/*.html`. Así puedes abrir `http://localhost:3000/login.html` (o `/clientes.html`, `/prestamos.html`, etc.) sin tener que incluir `/views/pages/` en la URL. Recuerda que la edición sigue haciéndose en `public/views/pages`.
+
+## 🧩 Sistema de componentes
 
 ### ¿Qué es?
 
-El sistema de componentes permite reutilizar código HTML común (como header y sidebar) sin duplicarlo en cada página. Esto mejora:
-- **Mantenibilidad**: Cambios en un solo lugar
-- **Consistencia**: Mismo diseño en todas las páginas
-- **Rendimiento**: Código más limpio y rápido
-- **Accesibilidad**: Mejor estructura semántica
+Permite reutilizar fragmentos HTML (header, sidebar, etc.) sin duplicar código. Mejora mantenibilidad, consistencia, rendimiento y accesibilidad.
 
-### Cómo Usar
+### Cómo usar
 
-#### 1. En una página HTML nueva:
+#### 1. Al crear una nueva vista (`public/views/pages/nueva-pagina.html`)
 
 ```html
 <!DOCTYPE html>
@@ -50,7 +60,7 @@ El sistema de componentes permite reutilizar código HTML común (como header y 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Página - ImaxPrestamos</title>
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
     <!-- Header Component -->
@@ -60,7 +70,6 @@ El sistema de componentes permite reutilizar código HTML común (como header y 
         <!-- Sidebar Component -->
         <div data-component="sidebar"></div>
 
-        <!-- Main Content -->
         <main class="main-content" role="main">
             <h1>Mi Contenido</h1>
             <!-- Tu contenido aquí -->
@@ -68,190 +77,123 @@ El sistema de componentes permite reutilizar código HTML común (como header y 
     </div>
 
     <!-- Scripts (IMPORTANTE: en este orden) -->
-    <script src="js/config.js"></script>
-    <script src="js/app.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/components.js"></script>
-    <!-- Tu script específico aquí -->
+    <script src="/js/config.js"></script>
+    <script src="/js/app.js"></script>
+    <script src="/js/utils.js"></script>
+    <script src="/js/components.js"></script>
+    <!-- Tu script específico -->
+    <script src="/js/nueva-pagina.js"></script>
 </body>
 </html>
 ```
 
-#### 2. Los componentes se cargan automáticamente
+#### 2. Carga automática
 
-El archivo `components.js` detecta los elementos con `data-component` y carga el HTML correspondiente desde `components/[nombre].html`.
+`src/js/components.js` detecta los elementos con `data-component` y busca el HTML en `/views/layouts/components/[nombre].html`.
 
 #### 3. Componentes disponibles
 
-- **header**: Header de navegación principal
-- **sidebar**: Menú lateral completo
+- **header**: navegación superior
+- **sidebar**: menú lateral principal
 
-### Crear un Nuevo Componente
+### Crear un nuevo componente
 
-1. Crea el archivo HTML en `components/`:
+1. Crea `public/views/layouts/components/mi-componente.html`:
+
 ```html
-<!-- components/mi-componente.html -->
 <div class="mi-componente">
-    <h2>Mi Componente</h2>
-    <p>Contenido del componente</p>
+    <h2>Mi componente</h2>
 </div>
 ```
 
-2. Úsalo en cualquier página:
+2. Úsalo en cualquier vista:
+
 ```html
 <div data-component="mi-componente"></div>
 ```
 
-3. El componente se cargará automáticamente cuando se cargue la página.
+## 🔐 Páginas de autenticación
 
-## 🔐 Páginas de Autenticación
+- `public/views/pages/login.html`
+- `public/views/pages/register.html`
 
-### Login (`login.html`)
+Características:
+- Validaciones avanzadas (`validateFormAdvanced()` desde `/js/utils.js`)
+- Mensajes accesibles (roles ARIA, focus management)
+- Auto-redirección tras autenticación
 
-- Formulario de inicio de sesión
-- Validación en tiempo real
-- Manejo de errores
-- Opción "Recordar sesión"
+## 🎨 Sistema de estilos
 
-### Registro (`register.html`)
+La organización en `src/scss` se mantiene modular:
 
-- Formulario de registro completo
-- Validación de cédula dominicana
-- Validación de contraseñas
-- Aceptación de términos
+1. `_variables.scss`: Colores, espaciados, tipografías y breakpoints.
+2. `_mixins.scss`: Funciones reutilizables.
+3. `base/`: Reset, tipografía, utilidades.
+4. `layout/`: Header, sidebar, footer, grid.
+5. `components/`: Botones, formularios, tablas, modales, etc.
+6. `pages/`: Estilos específicos para cada vista.
+7. `responsive/`: Media queries de mobile/tablet.
 
-### Características
+`src/scss/main.scss` importa todo y genera `public/css/main.css`.
 
-- **Validación avanzada**: Usa `validateFormAdvanced()` de `utils.js`
-- **Mensajes de error accesibles**: Con roles ARIA y mensajes claros
-- **Auto-redirección**: Después de login/registro exitoso
+### Buenas prácticas
 
-## 🎨 Sistema de Estilos
+- Utiliza variables y mixins para evitar valores mágicos.
+- Evita `!important`, prioriza la especificidad correcta.
+- Diseña mobile-first (breakpoints declarados en `_variables.scss`).
+- Mantén los estilos de cada página dentro de `pages/`.
 
-### Organización
+## 📝 Refactorizar páginas existentes
 
-Los estilos están organizados en:
+Para migrar una página antigua (fuera de `public/views/pages`):
 
-1. **Variables** (`_variables.scss`): Colores, espaciados, tipografías
-2. **Mixins** (`_mixins.scss`): Funciones reutilizables
-3. **Base**: Reset, tipografía, utilidades
-4. **Layout**: Header, sidebar, footer, grid
-5. **Components**: Botones, formularios, tablas, modales, etc.
-6. **Pages**: Estilos específicos por página
-7. **Responsive**: Media queries para móvil y tablet
+1. Mueve el archivo a `public/views/pages`.
+2. Reemplaza `header` y `sidebar` por los componentes (`div data-component`).
+3. Asegura que los scripts usen rutas absolutas (`/js/...`).
+4. Añade `role="main"` al contenido principal.
 
-### Prevenir Choques de Estilos
+El script `refactorizar_paginas.sh` automatiza este flujo buscando archivos dentro de `public/views/pages`.
 
-El archivo `scss/components/_components.scss` incluye:
+## 🚀 Funcionalidades clave
 
-- **Isolation**: Los componentes no interfieren entre sí
-- **Z-index organizado**: Header (1000), Sidebar (999), Modals (2000), Loading (3000)
-- **Reset de estilos**: Previene herencia no deseada
-- **Mejoras de accesibilidad**: Focus visible, roles ARIA
+- Navegación activa automática según la URL (`components.js`).
+- Datos del usuario centralizados (`auth.getCurrentUser()` dentro de `components.js`).
+- Componentes cacheados para reducir peticiones.
+- Accesibilidad: roles ARIA, focus visible, navegación por teclado.
 
-### Mejores Prácticas
+## 📋 Checklist para nuevas páginas
 
-1. **Usa las variables**: No hardcodees colores o espaciados
-2. **Sigue la estructura**: Mantén los estilos en sus archivos correspondientes
-3. **Evita !important**: Usa especificidad CSS correcta
-4. **Responsive first**: Diseña primero para móvil
+- [ ] Colocar `<link rel="stylesheet" href="/css/main.css">`.
+- [ ] Usar `data-component="header"` y `data-component="sidebar"`.
+- [ ] Agregar los scripts globales en el orden indicado.
+- [ ] Incluir `role="main"` en el `<main>`.
+- [ ] Mantener la semántica HTML5.
+- [ ] Validar accesibilidad con teclado.
+- [ ] Probar en mobile, tablet y desktop.
 
-## 📝 Refactorizar Páginas Existentes
-
-Para refactorizar una página existente:
-
-1. **Reemplaza el header**:
-```html
-<!-- ANTES -->
-<header class="header">...</header>
-
-<!-- DESPUÉS -->
-<div data-component="header"></div>
-```
-
-2. **Reemplaza el sidebar**:
-```html
-<!-- ANTES -->
-<aside class="sidebar">...</aside>
-
-<!-- DESPUÉS -->
-<div data-component="sidebar"></div>
-```
-
-3. **Agrega los scripts en orden**:
-```html
-<script src="js/config.js"></script>
-<script src="js/app.js"></script>
-<script src="js/utils.js"></script>
-<script src="js/components.js"></script>
-```
-
-4. **Mantén el contenido principal**:
-```html
-<main class="main-content" role="main">
-    <!-- Tu contenido aquí -->
-</main>
-```
-
-## 🚀 Funcionalidades del Sistema de Componentes
-
-### Actualización Automática de Navegación
-
-El sistema actualiza automáticamente:
-- Enlaces activos según la página actual
-- Información del usuario en el header
-- Badges de notificaciones
-
-### Accesibilidad
-
-- Roles ARIA apropiados
-- Navegación por teclado
-- Indicadores de foco visibles
-- Mensajes de error accesibles
-
-### Rendimiento
-
-- Componentes se cargan una vez y se cachean
-- Animaciones optimizadas con `will-change`
-- Reducción de repaint con `transform: translateZ(0)`
-
-## 📋 Checklist para Nuevas Páginas
-
-- [ ] Usar `data-component="header"` y `data-component="sidebar"`
-- [ ] Incluir scripts en el orden correcto
-- [ ] Agregar `role="main"` al contenido principal
-- [ ] Usar estructura semántica HTML5
-- [ ] Probar accesibilidad con navegación por teclado
-- [ ] Verificar que los estilos no choquen
-- [ ] Probar en diferentes tamaños de pantalla
-
-## 🔧 Solución de Problemas
+## 🔧 Solución de problemas
 
 ### Los componentes no se cargan
+1. Verifica que `/js/components.js` esté cargado después de `utils`.
+2. Revisa que el archivo exista en `/views/layouts/components/`.
+3. Revisa la consola del navegador para detectar errores 404 o CORS.
 
-1. Verifica que `components.js` esté cargado después de `app.js`
-2. Verifica que el archivo existe en `components/[nombre].html`
-3. Revisa la consola del navegador para errores
+### Los estilos no se actualizan
+1. Asegúrate de tener `npm run sass:watch` ejecutándose.
+2. Comprueba que `public/css/main.css` se regenere (revisa la fecha).
+3. Si el estilo específico no cambia, confirma que esté importado en `src/scss/main.scss`.
 
-### Los estilos se ven mal
+### La navegación activa falla
+1. Asegúrate de que los enlaces del sidebar tengan `data-page="nombre-archivo"`.
+2. Confirma que la URL real coincida con el nombre del archivo (`prestamos.html` → `data-page="prestamos"`).
+3. Si trabajas sin servidor (abriendo archivos directamente), utiliza rutas relativas válidas o `live-server`.
 
-1. Verifica que `css/main.css` esté compilado correctamente
-2. Revisa que `_components.scss` esté importado en `main.scss`
-3. Usa las herramientas de desarrollador para inspeccionar
+## 📚 Recursos adicionales
 
-### La navegación no se actualiza
-
-1. Verifica que los enlaces tengan `data-page` en el sidebar
-2. Verifica que el nombre de la página coincida con `data-page`
-3. Revisa la consola para errores de JavaScript
-
-## 📚 Recursos Adicionales
-
-- `MEJORAS_IMPLEMENTADAS.md`: Mejoras de seguridad y funcionalidad
-- `RESUMEN_CORRECCIONES.md`: Resumen de todas las correcciones
-- `ACTUALIZAR_HTML.md`: Guía para actualizar archivos HTML
+- `README.md`: Guía rápida de instalación y scripts.
+- `MEJORAS_IMPLEMENTADAS.md`, `RESUMEN_CORRECCIONES.md`: Cambios funcionales y correcciones (consultar en la raíz del repositorio si aplica).
 
 ---
 
-**Última actualización**: 2025-01-27
+**Última actualización**: 2025-11-27
 

@@ -1,0 +1,74 @@
+// ============================================
+// Grid System
+// ============================================
+
+@use '../globals' as *;
+@use 'sass:math';
+.container {
+  width: 100%;
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 0 $spacing-lg;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 (-$spacing-md);
+}
+
+.col {
+  flex: 1;
+  padding: 0 $spacing-md;
+}
+
+@for $i from 1 through 12 {
+  .col-#{$i} {
+    $ratio: math.div($i, 12);
+    flex: 0 0 math.percentage($ratio);
+    max-width: math.percentage($ratio);
+    padding: 0 $spacing-md;
+  }
+}
+
+@include respond-to(sm) {
+  @for $i from 1 through 12 {
+    .col-sm-#{$i} {
+      $ratio: math.div($i, 12);
+      flex: 0 0 math.percentage($ratio);
+      max-width: math.percentage($ratio);
+    }
+  }
+}
+
+@include respond-to(md) {
+  @for $i from 1 through 12 {
+    .col-md-#{$i} {
+      $ratio: math.div($i, 12);
+      flex: 0 0 math.percentage($ratio);
+      max-width: math.percentage($ratio);
+    }
+  }
+}
+
+@include respond-to(lg) {
+  @for $i from 1 through 12 {
+    .col-lg-#{$i} {
+      $ratio: math.div($i, 12);
+      flex: 0 0 math.percentage($ratio);
+      max-width: math.percentage($ratio);
+    }
+  }
+}
+
+@include respond-to(xl) {
+  @for $i from 1 through 12 {
+    .col-xl-#{$i} {
+      $ratio: math.div($i, 12);
+      flex: 0 0 math.percentage($ratio);
+      max-width: math.percentage($ratio);
+    }
+  }
+}
+
+

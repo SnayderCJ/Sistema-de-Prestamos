@@ -1,0 +1,53 @@
+// ============================================
+// ImaxPrestamos - Estilos Principales
+// Sistema de Gestión de Préstamos
+// ============================================
+
+@use 'sass:meta';
+
+// Variables
+@include meta.load-css('variables');
+@include meta.load-css('mixins');
+
+// Base
+@include meta.load-css('base/reset');
+@include meta.load-css('base/typography');
+@include meta.load-css('base/utilities');
+
+// Layout
+@include meta.load-css('layout/header');
+@include meta.load-css('layout/sidebar');
+@include meta.load-css('layout/footer');
+@include meta.load-css('layout/grid');
+
+// Components
+@include meta.load-css('components/buttons');
+@include meta.load-css('components/forms');
+@include meta.load-css('components/cards');
+@include meta.load-css('components/tables');
+@include meta.load-css('components/modals');
+@include meta.load-css('components/alerts');
+@include meta.load-css('components/badges');
+@include meta.load-css('components/pagination');
+@include meta.load-css('components/loading');
+@include meta.load-css('components/tabs');
+@include meta.load-css('components/dropdown');
+@include meta.load-css('components/checkboxes');
+@include meta.load-css('components/components');
+
+// Pages
+@include meta.load-css('pages/login');
+@include meta.load-css('pages/dashboard');
+@include meta.load-css('pages/dashboard-avanzado');
+@include meta.load-css('pages/notificaciones');
+@include meta.load-css('pages/prestamos');
+@include meta.load-css('pages/clientes');
+@include meta.load-css('pages/rutas');
+@include meta.load-css('pages/pagos');
+@include meta.load-css('pages/analisis');
+@include meta.load-css('pages/caja');
+
+// Responsive
+@include meta.load-css('responsive/mobile');
+@include meta.load-css('responsive/tablet');
+

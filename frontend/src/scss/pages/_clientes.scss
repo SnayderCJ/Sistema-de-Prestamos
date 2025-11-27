@@ -1,0 +1,24 @@
+@use '../globals' as *;
+
+// ============================================
+// Página de Clientes
+// ============================================
+
+.clientes {
+  padding: $spacing-xl;
+  
+  &-header {
+    @include flex-between;
+    margin-bottom: $spacing-xl;
+    flex-wrap: wrap;
+    gap: $spacing-md;
+  }
+  
+  &-search {
+    flex: 1;
+    min-width: 250px;
+  }
+}
+
+
+

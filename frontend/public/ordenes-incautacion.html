@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Órdenes de Incautación - ImaxPrestamos</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+    <!-- Header Component -->
+    <div data-component="header"></div>
+
+    <div class="main-layout">
+        <!-- Sidebar Component -->
+        <div data-component="sidebar"></div>
+
+        <main class="main-content" role="main">
+            <div class="page-header">
+                <h1>Órdenes de Incautación</h1>
+                <button class="btn btn-primary" onclick="abrirModalOrden()">Nueva Orden</button>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>Órdenes Registradas</h2>
+                </div>
+                <div class="table-responsive">
+                    <table class="table" id="tablaOrdenes">
+                        <thead>
+                            <tr>
+                                <th>Número</th>
+                                <th>Préstamo</th>
+                                <th>Cliente</th>
+                                <th>Fecha</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="6" class="text-center">Cargando...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Orden -->
+    <div class="modal" id="modalOrden">
+        <div class="modal-backdrop" onclick="cerrarModalOrden()"></div>
+        <div class="modal-dialog modal-lg">
+            <div class="modal-header">
+                <h3>Nueva Orden de Incautación</h3>
+                <button class="modal-close" onclick="cerrarModalOrden()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="formOrden" onsubmit="crearOrden(event)">
+                    <div class="form-group">
+                        <label>Préstamo *</label>
+                        <select class="form-control" id="prestamoOrden" required>
+                            <option value="">Seleccionar...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Fecha de Orden *</label>
+                        <input type="date" class="form-control" id="fechaOrden" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Motivo *</label>
+                        <textarea class="form-control" id="motivoOrden" rows="3" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Bienes a Incautar *</label>
+                        <textarea class="form-control" id="bienesOrden" rows="4" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Observaciones</label>
+                        <textarea class="form-control" id="observacionesOrden" rows="3"></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="cerrarModalOrden()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/config.js"></script>
+    <script src="/js/app.js"></script>
+    <script src="/js/utils.js"></script>
+    <script src="/js/components.js"></script>
+    <script src="/js/ordenes-incautacion.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,24 @@
+@use '../globals' as *;
+
+// ============================================
+// Página de Rutas
+// ============================================
+
+.rutas {
+  padding: $spacing-xl;
+  
+  &-map {
+    height: 500px;
+    background: $bg-light;
+    border-radius: $border-radius-lg;
+    margin-bottom: $spacing-xl;
+  }
+  
+  &-list {
+    display: grid;
+    gap: $spacing-lg;
+  }
+}
+
+
+

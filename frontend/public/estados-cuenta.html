@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estados de Cuenta - ImaxPrestamos</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+    <!-- Header Component -->
+    <div data-component="header"></div>
+
+    <div class="main-layout">
+        <!-- Sidebar Component -->
+        <div data-component="sidebar"></div>
+
+        <main class="main-content" role="main">
+            <div class="page-header">
+                <h1>Estados de Cuenta</h1>
+                <button class="btn btn-primary" onclick="generarEstadoCuenta()">Generar Estado</button>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>Filtros</h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Cliente</label>
+                            <select class="form-control" id="filtroCliente">
+                                <option value="">Todos</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Préstamo</label>
+                            <input type="text" class="form-control" id="filtroPrestamo" placeholder="Número de préstamo">
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha Desde</label>
+                            <input type="date" class="form-control" id="filtroFechaDesde">
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha Hasta</label>
+                            <input type="date" class="form-control" id="filtroFechaHasta">
+                        </div>
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <button class="btn btn-primary" onclick="cargarEstadosCuenta()">Buscar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>Estados de Cuenta Generados</h2>
+                </div>
+                <div class="table-responsive">
+                    <table class="table" id="tablaEstadosCuenta">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Cliente</th>
+                                <th>Préstamo</th>
+                                <th>Fecha Generación</th>
+                                <th>Período</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="6" class="text-center">Cargando...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Generar Estado -->
+    <div class="modal" id="modalEstadoCuenta">
+        <div class="modal-backdrop" onclick="cerrarModalEstado()"></div>
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3>Generar Estado de Cuenta</h3>
+                <button class="modal-close" onclick="cerrarModalEstado()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="formEstadoCuenta" onsubmit="crearEstadoCuenta(event)">
+                    <div class="form-group">
+                        <label>Cliente *</label>
+                        <select class="form-control" id="clienteEstado" required>
+                            <option value="">Seleccionar...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Préstamo *</label>
+                        <select class="form-control" id="prestamoEstado" required>
+                            <option value="">Seleccionar cliente primero</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Fecha Desde *</label>
+                            <input type="date" class="form-control" id="fechaDesdeEstado" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha Hasta *</label>
+                            <input type="date" class="form-control" id="fechaHastaEstado" required>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="cerrarModalEstado()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Generar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/config.js"></script>
+    <script src="/js/app.js"></script>
+    <script src="/js/utils.js"></script>
+    <script src="/js/components.js"></script>
+    <script src="/js/estados-cuenta.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,18 @@
+@use '../globals' as *;
+
+// ============================================
+// Responsive - Tablet
+// ============================================
+
+@include respond-to(md) {
+  .container {
+    padding: 0 $spacing-md;
+  }
+  
+  .dashboard-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+
+

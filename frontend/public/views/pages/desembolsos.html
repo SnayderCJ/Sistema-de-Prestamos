@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desembolsos - ImaxPrestamos</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+    <!-- Header -->
+    <!-- Header Component -->
+    <div data-component="header"></div>
+
+    <div class="main-layout">
+        <!-- Sidebar Component -->
+        <div data-component="sidebar"></div>
+
+        <main class="main-content" role="main">
+            <div class="page-header">
+                <h1>Desembolsos</h1>
+                <button class="btn btn-primary" onclick="nuevoDesembolso()">
+                    <span class="icon">➕</span> Nuevo Desembolso
+                </button>
+            </div>
+
+            <!-- Filtros -->
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="filters">
+                        <input type="text" id="filtroPrestamo" class="form-control form-control-sm" placeholder="Número de préstamo">
+                        <input type="date" id="fechaDesde" class="form-control form-control-sm">
+                        <input type="date" id="fechaHasta" class="form-control form-control-sm">
+                        <select id="filtroTipo" class="form-control form-control-sm">
+                            <option value="">Todos los tipos</option>
+                            <option value="efectivo">Efectivo</option>
+                            <option value="transferencia">Transferencia</option>
+                            <option value="cheque">Cheque</option>
+                            <option value="tarjeta">Tarjeta</option>
+                        </select>
+                        <button class="btn btn-secondary btn-sm" onclick="filtrarDesembolsos()">Filtrar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lista de Desembolsos -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Historial de Desembolsos</h2>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Préstamo</th>
+                                    <th>Fecha</th>
+                                    <th>Tipo</th>
+                                    <th>Monto</th>
+                                    <th>Banco</th>
+                                    <th>Usuario</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaDesembolsos">
+                                <tr>
+                                    <td colspan="8" class="text-center">Cargando...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Nuevo Desembolso -->
+    <div id="modalDesembolso" class="modal" style="display: none;">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h2>Nuevo Desembolso</h2>
+                <button class="modal-close" onclick="cerrarModal('modalDesembolso')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="formDesembolso">
+                    <div class="form-group">
+                        <label>Préstamo *</label>
+                        <select class="form-control" id="prestamoId" required onchange="cargarDatosPrestamo()">
+                            <option value="">Seleccionar préstamo</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo de Desembolso *</label>
+                        <select class="form-control" id="tipoDesembolso" required onchange="toggleCamposDesembolso()">
+                            <option value="">Seleccionar tipo</option>
+                            <option value="efectivo">Efectivo</option>
+                            <option value="transferencia">Transferencia</option>
+                            <option value="cheque">Cheque</option>
+                            <option value="tarjeta">Tarjeta</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Monto a Desembolsar (RD$) *</label>
+                        <input type="number" step="0.01" class="form-control" id="montoDesembolso" required>
+                        <small id="montoAprobado" class="form-text text-muted"></small>
+                    </div>
+                    <div id="camposTransferencia" style="display: none;">
+                        <div class="form-group">
+                            <label>Banco</label>
+                            <select class="form-control" id="bancoDesembolso">
+                                <option value="">Seleccionar banco</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Número de Cuenta</label>
+                            <input type="text" class="form-control" id="numeroCuenta">
+                        </div>
+                    </div>
+                    <div id="camposCheque" style="display: none;">
+                        <div class="form-group">
+                            <label>Número de Comprobante</label>
+                            <input type="text" class="form-control" id="numeroComprobante">
+                        </div>
+                        <div class="form-group">
+                            <label>Banco</label>
+                            <select class="form-control" id="bancoCheque">
+                                <option value="">Seleccionar banco</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Observaciones</label>
+                        <textarea class="form-control" id="observacionesDesembolso" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="cerrarModal('modalDesembolso')">Cancelar</button>
+                <button class="btn btn-primary" onclick="confirmarDesembolso()">Desembolsar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Detalle Desembolso -->
+    <div id="modalDetalleDesembolso" class="modal" style="display: none;">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h2>Detalle de Desembolso #<span id="detalleDesembolsoId"></span></h2>
+                <button class="modal-close" onclick="cerrarModal('modalDetalleDesembolso')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="grid grid-2">
+                    <div>
+                        <h3>Información General</h3>
+                        <table class="table">
+                            <tr>
+                                <th>ID:</th>
+                                <td><span id="detalleDesembolsoId">-</span></td>
+                            </tr>
+                            <tr>
+                                <th>Préstamo:</th>
+                                <td id="detalleNumeroPrestamo">-</td>
+                            </tr>
+                            <tr>
+                                <th>Cliente:</th>
+                                <td id="detalleCliente">-</td>
+                            </tr>
+                            <tr>
+                                <th>Fecha:</th>
+                                <td id="detalleFechaDesembolso">-</td>
+                            </tr>
+                            <tr>
+                                <th>Tipo:</th>
+                                <td><span class="badge badge-info" id="detalleTipoDesembolso">-</span></td>
+                            </tr>
+                            <tr>
+                                <th>Monto:</th>
+                                <td id="detalleMonto">-</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div>
+                        <h3>Información de Pago</h3>
+                        <table class="table">
+                            <tr>
+                                <th>Banco:</th>
+                                <td id="detalleBanco">-</td>
+                            </tr>
+                            <tr>
+                                <th>Número de Cuenta:</th>
+                                <td id="detalleNumeroCuenta">-</td>
+                            </tr>
+                            <tr>
+                                <th>Número de Comprobante:</th>
+                                <td id="detalleNumeroComprobante">-</td>
+                            </tr>
+                            <tr>
+                                <th>Usuario:</th>
+                                <td id="detalleUsuario">-</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <h3>Observaciones</h3>
+                    <p id="detalleObservaciones">-</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="cerrarModal('modalDetalleDesembolso')">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/config.js"></script>
+    <script src="/js/app.js"></script>
+    <script src="/js/utils.js"></script>
+    <script src="/js/components.js"></script>
+    <script src="/js/utils.js"></script>
+    <script src="/js/components.js"></script>
+    <script src="/js/desembolsos.js"></script>
+</body>
+</html>
+
