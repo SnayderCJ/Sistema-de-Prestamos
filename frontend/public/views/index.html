@@ -3,27 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ImaxPrestamos UI</title>
+    <title>Dashboard - ImaxPrestamos</title>
     <link rel="stylesheet" href="/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js" defer></script>
 </head>
-<body class="landing">
-    <main class="main-content" role="main">
-        <section class="dashboard-card">
-            <header class="dashboard-card__header">
-                <h1>ImaxPrestamos</h1>
-                <p>Plataforma web para la gestión integral de préstamos.</p>
-            </header>
-            <div class="dashboard-card__body">
-                <p>Selecciona una vista para comenzar:</p>
-                <div class="dashboard-metrics">
-                    <a class="metric-card" href="/views/pages/login.html">Login</a>
-                    <a class="metric-card" href="/views/pages/dashboard-avanzado.html">Dashboard Avanzado</a>
-                    <a class="metric-card" href="/views/pages/prestamos.html">Préstamos</a>
-                    <a class="metric-card" href="/views/pages/clientes.html">Clientes</a>
+<body>
+    <!-- Header se carga dinámicamente -->
+    <div data-component="header"></div>
+
+    <div class="main-layout">
+        <!-- Sidebar se carga dinámicamente -->
+        <div data-component="sidebar"></div>
+
+        <!-- Contenido Principal -->
+        <main class="main-content" role="main">
+            <div class="dashboard">
+                <div class="page-header">
+                    <h1>Dashboard Principal</h1>
+                    <p class="text-muted" id="welcomeMessage">Cargando información del usuario...</p>
+                </div>
+
+                <!-- Métricas Principales -->
+                <div class="dashboard-stats">
+                    <div class="card">
+                        <div class="card-stat" data-icon="📝">
+                            <span class="card-stat-value" data-stat="prestamos-activos">0</span>
+                            <span class="card-stat-label">Préstamos Activos</span>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-stat" data-icon="💰">
+                            <span class="card-stat-value" data-stat="monto-total">RD$ 0.00</span>
+                            <span class="card-stat-label">Cartera Total</span>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-stat" data-icon="⚠️">
+                            <span class="card-stat-value" data-stat="prestamos-vencidos">0</span>
+                            <span class="card-stat-label">Préstamos Vencidos</span>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-stat" data-icon="📅">
+                            <span class="card-stat-value" data-stat="cobros-hoy">RD$ 0.00</span>
+                            <span class="card-stat-label">Cobros del Día</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gráficos -->
+                <div class="dashboard-charts">
+                    <div class="chart-card">
+                        <h3>Préstamos por Estado</h3>
+                        <div class="chart-container">
+                            <canvas id="chartPrestamosEstado"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Evolución de la Cartera (Últimos 6 meses)</h3>
+                        <div class="chart-container">
+                            <canvas id="chartEvolucionPrestamos"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabla de Préstamos Vencidos -->
+                <div class="dashboard-section">
+                    <div class="dashboard-section-title">
+                        <h2>Préstamos con Mora</h2>
+                        <a href="/views/pages/prestamos.html?estado=vencido" class="btn btn-sm btn-secondary">Ver Todos</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table" id="tablaPrestamosVencidos">
+                            <thead>
+                                <tr>
+                                    <th>Número</th>
+                                    <th>Cliente</th>
+                                    <th>Monto Aprobado</th>
+                                    <th>Días de Mora</th>
+                                    <th>Monto en Mora</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Los datos se cargarán dinámicamente -->
+                                <tr><td colspan="6" class="text-center"><div class="loading"><div class="loading-spinner"></div></div></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </section>
-    </main>
+        </main>
+    </div>
+    
+    <!-- Scripts Esenciales -->
+    <script src="/js/config.js"></script>
+    <script src="/js/app.js"></script>
+    <script src="/js/utils.js"></script>
+    <script src="/js/components.js"></script>
+    
+    <!-- Scripts de la página -->
+    <script src="/js/dashboard.js"></script>
+    
+    <script>
+        // Personalizar mensaje de bienvenida
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = auth.getCurrentUser();
+            if (user && user.nombre) {
+                document.getElementById('welcomeMessage').textContent = `Bienvenido, ${user.nombre}. Aquí tienes un resumen de tu operación.`;
+            } else {
+                 document.getElementById('welcomeMessage').textContent = 'Bienvenido. Aquí tienes un resumen de tu operación.';
+            }
+        });
+    </script>
 </body>
 </html>
-

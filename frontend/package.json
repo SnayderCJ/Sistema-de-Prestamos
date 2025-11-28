@@ -9,9 +9,9 @@
     "js:watch": "cpx \"src/js/**/*\" public/js --watch",
     "assets:copy": "cpx \"src/assets/**/*\" public/img",
     "assets:watch": "cpx \"src/assets/**/*\" public/img --watch",
-    "pages:copy": "cpx \"public/views/pages/**/*.html\" public",
-    "pages:watch": "cpx \"public/views/pages/**/*.html\" public --watch",
-    "serve": "live-server public --port=3000 --open=/views/index.html",
+    "pages:copy": "cpx \"public/views/pages/*.html\" public/",
+    "pages:watch": "cpx \"public/views/pages/*.html\" public/ --watch",
+    "serve": "live-server public --port=3000 --open=/login.html",
     "dev": "npm-run-all --parallel sass:watch js:watch assets:watch pages:watch serve",
     "build": "npm-run-all js:copy assets:copy pages:copy sass:build"
   },
@@ -29,4 +29,3 @@
     "sass": "^1.69.5"
   }
 }
-

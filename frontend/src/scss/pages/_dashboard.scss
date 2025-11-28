@@ -1,64 +1,114 @@
 @use '../globals' as *;
 
 // ============================================
-// Dashboard
+// Estilos del Dashboard
 // ============================================
 
 .dashboard {
-  padding: $spacing-lg;
-
-  h1 {
-    margin-bottom: $spacing-xl;
-    color: $text-primary;
+  padding: $spacing-xl;
+  
+  .page-header {
+    h1 {
+      margin-bottom: $spacing-xs;
+    }
+    p {
+      margin-top: 0;
+      font-size: $font-size-lg;
+    }
   }
 }
 
 .dashboard-stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: $spacing-lg;
   margin-bottom: $spacing-2xl;
+
+  // Estilo individual de las tarjetas de estadísticas
+  .card {
+    @include card;
+    padding: $spacing-lg;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: $shadow-lg;
+    }
+
+    .card-stat {
+      position: relative;
+      
+      &-value {
+        font-size: $font-size-4xl;
+        font-weight: $font-weight-bold;
+        color: $text-primary;
+        display: block;
+        line-height: 1;
+      }
+      
+      &-label {
+        font-size: $font-size-base;
+        color: $text-secondary;
+        margin-top: $spacing-sm;
+        font-weight: $font-weight-medium;
+      }
+
+      // Icono decorativo de fondo
+      &:before {
+        content: attr(data-icon);
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 4rem;
+        color: $primary-color;
+        opacity: 0.08;
+        transition: opacity 0.3s ease;
+      }
+    }
+    
+    &:hover .card-stat:before {
+      opacity: 0.15;
+    }
+  }
 }
 
 .dashboard-section {
   margin-bottom: $spacing-2xl;
   background: $bg-primary;
-  border-radius: $border-radius-lg;
+  border-radius: $border-radius-xl;
   padding: $spacing-xl;
-  box-shadow: $shadow-sm;
+  box-shadow: $shadow-md;
+  border: 1px solid $border-color;
 
   &-title {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: $spacing-lg;
+    padding-bottom: $spacing-md;
+    border-bottom: 1px solid $border-color;
 
     h2 {
       margin: 0;
       color: $text-primary;
       font-size: $font-size-xl;
+      font-weight: $font-weight-semibold;
     }
   }
 }
 
-// Gráficos
+// Contenedores de Gráficos
 .dashboard-charts {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: $spacing-xl;
   margin-bottom: $spacing-2xl;
 }
 
-.chart-container {
-  width: 100%;
-  min-height: 300px;
-}
-
 .chart-card {
-  background: $bg-primary;
-  border-radius: $border-radius-lg;
+  @include card;
   padding: $spacing-lg;
-  box-shadow: $shadow-sm;
   height: 100%;
 
   h3 {
@@ -67,14 +117,23 @@
     font-size: $font-size-lg;
     font-weight: $font-weight-semibold;
   }
-
-  canvas {
-    max-height: 300px;
+  
+  .chart-container {
+    width: 100%;
+    min-height: 300px;
+    
+    canvas {
+      max-height: 300px;
+    }
   }
 }
 
 // Responsive
 @media (max-width: 768px) {
+  .dashboard {
+    padding: $spacing-lg;
+  }
+  
   .dashboard-charts {
     grid-template-columns: 1fr;
   }
@@ -88,50 +147,4 @@
   }
 }
 
-// Gráficos
-.dashboard-charts {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: $spacing-xl;
-  margin-bottom: $spacing-2xl;
-}
-
-.chart-container {
-  width: 100%;
-  min-height: 300px;
-}
-
-.chart-card {
-  background: $bg-primary;
-  border-radius: $border-radius-lg;
-  padding: $spacing-lg;
-  box-shadow: $shadow-sm;
-  height: 100%;
-
-  h3 {
-    margin: 0 0 $spacing-lg 0;
-    color: $text-primary;
-    font-size: $font-size-lg;
-    font-weight: $font-weight-semibold;
-  }
-
-  canvas {
-    max-height: 300px;
-  }
-}
-
-// Responsive
-@media (max-width: 768px) {
-  .dashboard-charts {
-    grid-template-columns: 1fr;
-  }
-
-  .chart-container {
-    min-height: 250px;
-  }
-
-  .dashboard-stats {
-    grid-template-columns: 1fr;
-  }
-}
-
+// Para evitar duplicados, no se repite el código de responsive que ya estaba

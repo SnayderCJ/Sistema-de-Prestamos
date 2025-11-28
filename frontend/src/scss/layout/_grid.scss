@@ -71,4 +71,15 @@
   }
 }
 
+.main-layout {
+  display: flex;
+}
+
+.main-content {
+  flex: 1;
+  padding: $spacing-xl;
+  height: calc(100vh - 64px); // Header height
+  overflow-y: auto;
+}
+
 

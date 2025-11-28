@@ -47,6 +47,7 @@
 @include meta.load-css('pages/analisis');
 @include meta.load-css('pages/caja');
 @include meta.load-css('pages/register');
+@include meta.load-css('pages/index_landing');
 
 // Responsive
 @include meta.load-css('responsive/mobile');

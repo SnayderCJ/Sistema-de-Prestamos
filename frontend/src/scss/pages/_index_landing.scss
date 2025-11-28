@@ -1,0 +1,102 @@
+// frontend/src/scss/pages/_index_landing.scss
+
+.landing {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f2f5; // Un color de fondo suave y moderno
+    font-family: 'Arial', sans-serif; // Fuente base simple
+}
+
+.dashboard-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    text-align: center;
+    max-width: 600px;
+    width: 90%;
+    margin: 20px;
+
+    &__header {
+        margin-bottom: 30px;
+
+        h1 {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.1em;
+            color: #666;
+            line-height: 1.5;
+        }
+    }
+
+    &__body {
+        p {
+            font-size: 1em;
+            color: #555;
+            margin-bottom: 25px;
+        }
+    }
+}
+
+.dashboard-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+    justify-content: center;
+}
+
+.metric-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+    background-color: #007bff; // Color primario
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 1.2em;
+    font-weight: bold;
+    transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
+
+    &:hover {
+        transform: translateY(-5px);
+        background-color: #0056b3; // Tono más oscuro al pasar el ratón
+    }
+}
+
+// Responsiveness básica
+@media (max-width: 768px) {
+    .dashboard-card {
+        padding: 30px;
+
+        &__header {
+            h1 {
+                font-size: 2em;
+            }
+            p {
+                font-size: 1em;
+            }
+        }
+    }
+    .metric-card {
+        font-size: 1.1em;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard-card {
+        padding: 20px;
+    }
+    .metric-card {
+        font-size: 1em;
+        padding: 15px;
+    }
+}
